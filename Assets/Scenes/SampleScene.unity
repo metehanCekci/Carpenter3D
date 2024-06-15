@@ -1147,7 +1147,7 @@ MonoBehaviour:
   slideSpeed: 30
   jumpForce: 50
   dashForce: 300
-  dashCooldown: 1
+  dashCooldown: 0.5
   gravity: -9.81
   crouchHeight: 0.5
   standingHeight: 2

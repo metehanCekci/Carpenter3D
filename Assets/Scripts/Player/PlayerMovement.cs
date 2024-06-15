@@ -4,19 +4,20 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] ReadJson jsonReader;
     [SerializeField] float movementSpeed = 10f;
-    [SerializeField] float crouchSpeed = 5f;  // Eðilme sýrasýnda hareket hýzý
-    [SerializeField] float slideSpeed = 25f;  // Kayma sýrasýnda hareket hýzý
+    [SerializeField] float crouchSpeed = 5f;  // Eï¿½ilme sï¿½rasï¿½nda hareket hï¿½zï¿½
+    [SerializeField] float slideSpeed = 25f;  // Kayma sï¿½rasï¿½nda hareket hï¿½zï¿½
     [SerializeField] float jumpForce = 10f;
-    [SerializeField] float dashForce = 20f;   // Atýlma sýrasýnda uygulanan kuvvet
-    [SerializeField] float dashCooldown = 1f; // Atýlma için bekleme süresi
+    [SerializeField] float dashForce = 20f;   // Atï¿½lma sï¿½rasï¿½nda uygulanan kuvvet
+    [SerializeField] float dashCooldown = 1f; // Atï¿½lma iï¿½in bekleme sï¿½resi
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
     [SerializeField] float standingHeight = 2f;
     [SerializeField] private float slopeForce = 2f;
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
-    [SerializeField] private float fastFallMultiplier = 10f; // Havada hýzlý iniþ için ek kuvvet çarpaný
+    [SerializeField] private float fastFallMultiplier = 10f; // Havada hï¿½zlï¿½ iniï¿½ iï¿½in ek kuvvet ï¿½arpanï¿½
 
     private Vector2 moveInput;
     private Vector3 slideDirection;
@@ -27,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isCrouching;
     private bool isSliding;
     private bool isDashing;
-    private bool canDash = true;  // Atýlma eylemini yapabilme durumu
+    private bool canDash = true;  // Atï¿½lma eylemini yapabilme durumu
     private CapsuleCollider capsuleCollider;
 
     void Awake()
@@ -60,8 +61,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
-        rigidBody.freezeRotation = true;  // Rotation'u dondurarak stabiliteyi artýr
-        rigidBody.useGravity = true; // Yerçekimini kullan
+        rigidBody.freezeRotation = true;  // Rotation'u dondurarak stabiliteyi artï¿½r
+        rigidBody.useGravity = true; // Yerï¿½ekimini kullan
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
@@ -73,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        if (isDashing) return;  // Eðer atýlma yapýlýyorsa hareket etmeyi durdur
+        if (isDashing) return;  // Eï¿½er atï¿½lma yapï¿½lï¿½yorsa hareket etmeyi durdur
 
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move;
@@ -92,16 +93,16 @@ public class PlayerMovement : MonoBehaviour
             move = Vector3.ProjectOnPlane(move, GetSlopeNormal());
             if (moveInput == Vector2.zero)
             {
-                rigidBody.drag = slopeDrag; // Hareket yokken sürtünmeyi artýr
+                rigidBody.drag = slopeDrag; // Hareket yokken sï¿½rtï¿½nmeyi artï¿½r
             }
             else
             {
-                rigidBody.drag = 0f; // Hareket varken sürtünmeyi sýfýrla
+                rigidBody.drag = 0f; // Hareket varken sï¿½rtï¿½nmeyi sï¿½fï¿½rla
             }
         }
         else
         {
-            rigidBody.drag = 0f; // Düz zeminde sürtünmeyi sýfýrla
+            rigidBody.drag = 0f; // Dï¿½z zeminde sï¿½rtï¿½nmeyi sï¿½fï¿½rla
         }
 
         Vector3 targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
@@ -125,10 +126,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded)
         {
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hýzýný sýfýrla
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hï¿½zï¿½nï¿½ sï¿½fï¿½rla
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isJumping = true;
         }
+        else if(jsonReader.Config)
+        
     }
 
     void OnCrouch(InputAction.CallbackContext context)
@@ -144,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!isGrounded)
             {
-                // Havada hýzlý iniþ yap
+                // Havada hï¿½zlï¿½ iniï¿½ yap
                 rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
             }
             else
@@ -173,12 +176,12 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
-        canDash = false; // Atýlma yapýlamaz hale getir
+        canDash = false; // Atï¿½lma yapï¿½lamaz hale getir
         rigidBody.AddForce(transform.forward * dashForce, ForceMode.Impulse);
-        yield return new WaitForSeconds(0.1f);  // Atýlma süresi
+        yield return new WaitForSeconds(0.1f);  // Atï¿½lma sï¿½resi
         isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);  // Atýlma için bekleme süresi
-        canDash = true; // Atýlma tekrar yapýlabilir hale gelir
+        yield return new WaitForSeconds(dashCooldown);  // Atï¿½lma iï¿½in bekleme sï¿½resi
+        canDash = true; // Atï¿½lma tekrar yapï¿½labilir hale gelir
     }
 
     private bool OnSlope()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.2221343, g: 0.24667445, b: 0.24759121, a: 1}
+  m_IndirectSpecularColor: {r: 0.22210543, g: 0.24668942, b: 0.24759015, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -525,9 +525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42a99367ae7d4474db92b275e2f7eff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  mouseSensitivity: 25
   playerBody: {fileID: 2036075892}
-  smoothTime: 0.1
+  smoothTime: 1
 --- !u!1 &1002906129
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,7 +1140,7 @@ MonoBehaviour:
   slideSpeed: 30
   jumpForce: 50
   dashForce: 300
-  dashCooldown: 2
+  dashCooldown: 1
   gravity: -9.81
   crouchHeight: 0.5
   standingHeight: 2

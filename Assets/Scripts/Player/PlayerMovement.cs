@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] ReadJson jsonReader;
     [SerializeField] float movementSpeed = 10f;
     [SerializeField] float crouchSpeed = 5f;  // E�ilme s�ras�nda hareket h�z�
     [SerializeField] float slideSpeed = 25f;  // Kayma s�ras�nda hareket h�z�
@@ -25,7 +25,6 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputActions inputActions;
     private bool isGrounded;
     private bool isJumping;
-    private bool canMove = true;
     private bool canDJump = true;
     private bool isCrouching;
     private bool isSliding;
@@ -76,42 +75,39 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        if (canMove)
+        if (isDashing) return;  // E�er at�lma yap�l�yorsa hareket etmeyi durdur
+
+        float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
+        Vector3 move;
+
+        if (isSliding)
         {
-            if (isDashing) return;  // E�er at�lma yap�l�yorsa hareket etmeyi durdur
-
-            float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
-            Vector3 move;
-
-            if (isSliding)
-            {
-                move = slideDirection;
-            }
-            else
-            {
-                move = transform.right * moveInput.x + transform.forward * moveInput.y;
-            }
-
-            if (OnSlope())
-            {
-                move = Vector3.ProjectOnPlane(move, GetSlopeNormal());
-                if (moveInput == Vector2.zero)
-                {
-                    rigidBody.drag = slopeDrag; // Hareket yokken s�rt�nmeyi art�r
-                }
-                else
-                {
-                    rigidBody.drag = 0f; // Hareket varken s�rt�nmeyi s�f�rla
-                }
-            }
-            else
-            {
-                rigidBody.drag = 0f; // D�z zeminde s�rt�nmeyi s�f�rla
-            }
-
-            Vector3 targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
-            rigidBody.velocity = targetVelocity;
+            move = slideDirection;
         }
+        else
+        {
+            move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        }
+
+        if (OnSlope())
+        {
+            move = Vector3.ProjectOnPlane(move, GetSlopeNormal());
+            if (moveInput == Vector2.zero)
+            {
+                rigidBody.drag = slopeDrag; // Hareket yokken s�rt�nmeyi art�r
+            }
+            else
+            {
+                rigidBody.drag = 0f; // Hareket varken s�rt�nmeyi s�f�rla
+            }
+        }
+        else
+        {
+            rigidBody.drag = 0f; // D�z zeminde s�rt�nmeyi s�f�rla
+        }
+
+        Vector3 targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
+        rigidBody.velocity = targetVelocity;
     }
 
     void ApplyGravity()
@@ -165,8 +161,7 @@ public class PlayerMovement : MonoBehaviour
             else if (!isGrounded)
             {
                 // Havada h�zl� ini� yap
-                StartCoroutine(Slam());
-
+                rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
             }
             else
             {
@@ -174,18 +169,6 @@ public class PlayerMovement : MonoBehaviour
                 capsuleCollider.height = crouchHeight;
             }
         }
-    }
-
-    IEnumerator Slam()
-    {
-        canMove = false;
-        rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        this.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        yield return new WaitForSeconds(0.2f);
-        this.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-        canMove = true;
-        rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
-        
     }
 
     void OnCrouchCanceled(InputAction.CallbackContext context)
@@ -207,7 +190,14 @@ public class PlayerMovement : MonoBehaviour
     {
         isDashing = true;
         canDash = false; // At�lma yap�lamaz hale getir
-        rigidBody.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+
+        Vector3 dashDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+        if (dashDirection == Vector3.zero)
+        {
+            dashDirection = transform.forward; // Default direction if no input
+        }
+        rigidBody.AddForce(dashDirection.normalized * dashForce, ForceMode.Impulse);
+
         yield return new WaitForSeconds(0.1f);  // At�lma s�resi
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);  // At�lma i�in bekleme s�resi

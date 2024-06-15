@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.22210543, g: 0.24668942, b: 0.24759015, a: 1}
+  m_IndirectSpecularColor: {r: 0.22210695, g: 0.24669054, b: 0.24759094, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1141,10 +1141,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93eb8040ac6356845ad02601ed4122f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jsonReader: {fileID: 0}
   movementSpeed: 20
   crouchSpeed: 5
   slideSpeed: 30
   jumpForce: 50
+  slamForce: 30
   dashForce: 300
   dashCooldown: 0.5
   gravity: -9.81
@@ -1247,6 +1249,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 304e6ea2-aef2-4517-b417-f272b9741547
     m_ActionName: Player/Crouch[/Keyboard/ctrl]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 93eb8040ac6356845ad02601ed4122f1, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 387bc2ed-1d4f-4b3c-9659-8fbd11afa30f
+    m_ActionName: Player/Slam[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

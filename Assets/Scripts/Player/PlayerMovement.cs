@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float crouchSpeed = 5f;  // E�ilme s�ras�nda hareket h�z�
     [SerializeField] float slideSpeed = 25f;  // Kayma s�ras�nda hareket h�z�
     [SerializeField] float jumpForce = 10f;
+    [SerializeField] float slamForce = 30f;
     [SerializeField] float dashForce = 20f;   // At�lma s�ras�nda uygulanan kuvvet
     [SerializeField] float dashCooldown = 1f; // At�lma i�in bekleme s�resi
     [SerializeField] float gravity = -9.81f;
@@ -18,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
     [SerializeField] private float fastFallMultiplier = 10f; // Havada h�zl� ini� i�in ek kuvvet �arpan�
+
 
     private Vector2 moveInput;
     private Vector3 slideDirection;
@@ -30,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isSliding;
     private bool isDashing;
     private bool canDash = true;  // At�lma eylemini yapabilme durumu
+    private bool isSlamming = false;
     private CapsuleCollider capsuleCollider;
 
     void Awake()
@@ -45,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.performed += OnCrouch;
         inputActions.Player.Crouch.canceled += OnCrouchCanceled;
         inputActions.Player.Dash.performed += OnDash;
+        inputActions.Player.Slam.performed += StartSlam;
         inputActions.Player.Enable();
     }
 
@@ -56,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.performed -= OnCrouch;
         inputActions.Player.Crouch.canceled -= OnCrouchCanceled;
         inputActions.Player.Dash.performed -= OnDash;
+        inputActions.Player.Dash.performed -= StartSlam;
         inputActions.Player.Disable();
     }
 
@@ -67,10 +72,13 @@ public class PlayerMovement : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
+
+
     void FixedUpdate()
     {
         Move();
         ApplyGravity();
+        
     }
 
     void Move()
@@ -145,6 +153,27 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+    }
+
+    public void StartSlam(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (!isGrounded)
+            {
+                isSlamming = true;
+                rigidBody.velocity = Vector3.down * slamForce;
+                //animator.SetTrigger("Slam"); 
+            }
+        }
+
+
+    }
+
+    void SlamImpact()
+    {
+        // Implement effects here, like camera shake, damaging enemies, etc.
+        Debug.Log("Slam Impact!");
     }
 
     void OnCrouch(InputAction.CallbackContext context)
@@ -228,12 +257,25 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
+    {   
+        /*
+        Bitwise operation kullanımına bakılmalı, çok daha verimli
+        ve hızlı !!!!!!!!!!!
+        */
+        if (collision.gameObject.CompareTag("Ground")) 
         {
+            
+            if (isSlamming)
+            {
+                SlamImpact();
+                isGrounded = true;
+                isSlamming = false;
+            }
             isGrounded = true;
             canDJump = true;
             isJumping = false;
+            
+
         }
     }
 

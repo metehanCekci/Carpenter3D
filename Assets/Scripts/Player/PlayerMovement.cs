@@ -1,0 +1,232 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections;
+
+public class PlayerMovement : MonoBehaviour
+{
+    [SerializeField] float movementSpeed = 10f;
+    [SerializeField] float crouchSpeed = 5f;  // Eðilme sýrasýnda hareket hýzý
+    [SerializeField] float slideSpeed = 25f;  // Kayma sýrasýnda hareket hýzý
+    [SerializeField] float jumpForce = 10f;
+    [SerializeField] float dashForce = 20f;   // Atýlma sýrasýnda uygulanan kuvvet
+    [SerializeField] float dashCooldown = 1f; // Atýlma için bekleme süresi
+    [SerializeField] float gravity = -9.81f;
+    [SerializeField] float crouchHeight = 0.7f;
+    [SerializeField] float standingHeight = 2f;
+    [SerializeField] private float slopeForce = 2f;
+    [SerializeField] private float slopeForceRayLength = 1.5f;
+    [SerializeField] private float slopeDrag = 5f;
+    [SerializeField] private float fastFallMultiplier = 10f; // Havada hýzlý iniþ için ek kuvvet çarpaný
+
+    private Vector2 moveInput;
+    private Vector3 slideDirection;
+    private Rigidbody rigidBody;
+    private PlayerInputActions inputActions;
+    private bool isGrounded;
+    private bool isJumping;
+    private bool isCrouching;
+    private bool isSliding;
+    private bool isDashing;
+    private bool canDash = true;  // Atýlma eylemini yapabilme durumu
+    private CapsuleCollider capsuleCollider;
+
+    void Awake()
+    {
+        inputActions = new PlayerInputActions();
+    }
+
+    void OnEnable()
+    {
+        inputActions.Player.Move.performed += OnMove;
+        inputActions.Player.Move.canceled += OnMove;
+        inputActions.Player.Jump.performed += OnJump;
+        inputActions.Player.Crouch.performed += OnCrouch;
+        inputActions.Player.Crouch.canceled += OnCrouchCanceled;
+        inputActions.Player.Dash.performed += OnDash;
+        inputActions.Player.Enable();
+    }
+
+    void OnDisable()
+    {
+        inputActions.Player.Move.performed -= OnMove;
+        inputActions.Player.Move.canceled -= OnMove;
+        inputActions.Player.Jump.performed -= OnJump;
+        inputActions.Player.Crouch.performed -= OnCrouch;
+        inputActions.Player.Crouch.canceled -= OnCrouchCanceled;
+        inputActions.Player.Dash.performed -= OnDash;
+        inputActions.Player.Disable();
+    }
+
+    void Start()
+    {
+        rigidBody = GetComponent<Rigidbody>();
+        rigidBody.freezeRotation = true;  // Rotation'u dondurarak stabiliteyi artýr
+        rigidBody.useGravity = true; // Yerçekimini kullan
+        capsuleCollider = GetComponent<CapsuleCollider>();
+    }
+
+    void FixedUpdate()
+    {
+        Move();
+        ApplyGravity();
+    }
+
+    void Move()
+    {
+        if (isDashing) return;  // Eðer atýlma yapýlýyorsa hareket etmeyi durdur
+
+        float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
+        Vector3 move;
+
+        if (isSliding)
+        {
+            move = slideDirection;
+        }
+        else
+        {
+            move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        }
+
+        if (OnSlope())
+        {
+            move = Vector3.ProjectOnPlane(move, GetSlopeNormal());
+            if (moveInput == Vector2.zero)
+            {
+                rigidBody.drag = slopeDrag; // Hareket yokken sürtünmeyi artýr
+            }
+            else
+            {
+                rigidBody.drag = 0f; // Hareket varken sürtünmeyi sýfýrla
+            }
+        }
+        else
+        {
+            rigidBody.drag = 0f; // Düz zeminde sürtünmeyi sýfýrla
+        }
+
+        Vector3 targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
+        rigidBody.velocity = targetVelocity;
+    }
+
+    void ApplyGravity()
+    {
+        if (!isGrounded)
+        {
+            rigidBody.AddForce(new Vector3(0, gravity, 0), ForceMode.Acceleration);
+        }
+    }
+
+    void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        if (isGrounded)
+        {
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hýzýný sýfýrla
+            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isJumping = true;
+        }
+    }
+
+    void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (isGrounded && moveInput != Vector2.zero)
+            {
+                isSliding = true;
+                isCrouching = true;
+                slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized;
+                capsuleCollider.height = crouchHeight;
+            }
+            else if (!isGrounded)
+            {
+                // Havada hýzlý iniþ yap
+                rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
+            }
+            else
+            {
+                isCrouching = true;
+                capsuleCollider.height = crouchHeight;
+            }
+        }
+    }
+
+    void OnCrouchCanceled(InputAction.CallbackContext context)
+    {
+        isCrouching = false;
+        isSliding = false;
+        capsuleCollider.height = standingHeight;
+    }
+
+    void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.performed && canDash && !isDashing)
+        {
+            StartCoroutine(Dash());
+        }
+    }
+
+    private IEnumerator Dash()
+    {
+        isDashing = true;
+        canDash = false; // Atýlma yapýlamaz hale getir
+        rigidBody.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.1f);  // Atýlma süresi
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);  // Atýlma için bekleme süresi
+        canDash = true; // Atýlma tekrar yapýlabilir hale gelir
+    }
+
+    private bool OnSlope()
+    {
+        if (isJumping)
+            return false;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength))
+        {
+            return hit.normal != Vector3.up;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeNormal()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength))
+        {
+            return hit.normal;
+        }
+        return Vector3.up;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            isJumping = false;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            isJumping = false;
+        }
+    }
+}

@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputActions inputActions;
     private bool isGrounded;
     private bool isJumping;
+    private bool canDJump = true;
     private bool isCrouching;
     private bool isSliding;
     private bool isDashing;
@@ -124,14 +125,26 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if (isGrounded)
+        if (context.performed)
         {
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni h�z�n� s�f�rla
-            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isJumping = true;
+            if (isGrounded)
+            {
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hızını sıfırla
+                rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                isJumping = true;
+            }
+            else if (ReadJson.Instance.config.hasDoubleJump) // buraya
+            {
+                if (canDJump)
+                {
+                    rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hızını sıfırla
+                    rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                    isJumping = true;
+                    canDJump = false;
+                }
+            }
         }
-        else if(jsonReader.Config)
-        
+
     }
 
     void OnCrouch(InputAction.CallbackContext context)
@@ -212,6 +225,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            canDJump = true;
             isJumping = false;
         }
     }
@@ -229,6 +243,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            canDJump = true;
             isJumping = false;
         }
     }

@@ -1141,7 +1141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93eb8040ac6356845ad02601ed4122f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonReader: {fileID: 0}
   movementSpeed: 20
   crouchSpeed: 5
   slideSpeed: 30

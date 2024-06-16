@@ -8,13 +8,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float crouchSpeed = 5f;  // E�ilme s�ras�nda hareket h�z�
     [SerializeField] float slideSpeed = 25f;  // Kayma s�ras�nda hareket h�z�
     [SerializeField] float jumpForce = 10f;
-    [SerializeField] float slamForce = 30f;
     [SerializeField] float dashForce = 20f;   // At�lma s�ras�nda uygulanan kuvvet
     [SerializeField] float dashCooldown = 1f; // At�lma i�in bekleme s�resi
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
     [SerializeField] float standingHeight = 2f;
-    [SerializeField] private float slopeForce = 2f;
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
     [SerializeField] private float fastFallMultiplier = 10f; // Havada h�zl� ini� i�in ek kuvvet �arpan�
@@ -33,10 +31,12 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;  // At�lma eylemini yapabilme durumu
     private bool isSlamming = false;
     private CapsuleCollider capsuleCollider;
+    private Camera mainCamera;
 
     void Awake()
     {
         inputActions = new PlayerInputActions();
+        mainCamera = Camera.main;
     }
 
     void OnEnable()
@@ -203,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
-        canDash = false; // At�lma yap�lamaz hale getir
+        canDash = false; // Atılma yapılamaz hale getir
 
         SfxScript.Instance.playDash();
         Vector3 dashDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
@@ -211,13 +211,91 @@ public class PlayerMovement : MonoBehaviour
         {
             dashDirection = transform.forward; // Default direction if no input
         }
+
+        StartCoroutine(TiltCamera(dashDirection)); // Kamera eğilme fonksiyonunu çağır
+
         rigidBody.AddForce(dashDirection.normalized * dashForce, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(0.1f);  // At�lma s�resi
+        yield return new WaitForSeconds(0.1f);  // Atılma süresi
         isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);  // At�lma i�in bekleme s�resi
-        canDash = true; // At�lma tekrar yap�labilir hale gelir
+        yield return new WaitForSeconds(dashCooldown);  // Atılma için bekleme süresi
+        canDash = true; // Atılma tekrar yapılabilir hale gelir
     }
+
+
+    private IEnumerator TiltCamera(Vector3 dashDirection)
+    {
+        float tiltDuration = 0.2f; // Kamera eğilme süresi
+        float tiltAngle = 20f; // Kamera eğilme açısı
+        float originalFOV = mainCamera.fieldOfView;
+        float targetFOV = originalFOV;
+
+        Quaternion originalRotation = mainCamera.transform.localRotation;
+        Quaternion targetRotation = originalRotation;
+
+        // İleri veya geri dash
+        if (dashDirection.z != 0 && dashDirection.x <=0)
+        {
+            targetFOV = dashDirection.z > 0 ? originalFOV + 10 : originalFOV - 10;
+        }
+
+        // Sola veya sağa dash
+        if (dashDirection.x != 0 && dashDirection.z <=0)
+        {
+            targetRotation = Quaternion.Euler(mainCamera.transform.localEulerAngles.x, mainCamera.transform.localEulerAngles.y, -dashDirection.x * tiltAngle);
+        }
+
+        float time = 0f;
+        while (time < tiltDuration)
+        {
+            if (dashDirection.z != 0)
+            {
+                mainCamera.fieldOfView = Mathf.Lerp(originalFOV, targetFOV, time / tiltDuration);
+            }
+
+            if (dashDirection.x != 0)
+            {
+                mainCamera.transform.localRotation = Quaternion.Lerp(originalRotation, targetRotation, time / tiltDuration);
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        if (dashDirection.z != 0)
+        {
+            mainCamera.fieldOfView = targetFOV;
+        }
+
+        if (dashDirection.x != 0)
+        {
+            mainCamera.transform.localRotation = targetRotation;
+        }
+
+        time = 0f;
+        while (time < tiltDuration)
+        {
+            if (dashDirection.z != 0)
+            {
+                mainCamera.fieldOfView = Mathf.Lerp(targetFOV, originalFOV, time / tiltDuration);
+            }
+
+            if (dashDirection.x != 0)
+            {
+                mainCamera.transform.localRotation = Quaternion.Lerp(targetRotation, originalRotation, time / tiltDuration);
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        mainCamera.fieldOfView = originalFOV;
+        mainCamera.transform.localRotation = originalRotation;
+    }
+
+
+
+
 
     private bool OnSlope()
     {
@@ -253,12 +331,10 @@ public class PlayerMovement : MonoBehaviour
             if (isSlamming)
             {
                 SlamImpact();
-                SfxScript.Instance.playSlam(); //metehan buraya bak
-                Debug.Log("vurdu yer");
+                SfxScript.Instance.playSlam();
                 isGrounded = true;
                 isSlamming = false;
             }
-            Debug.Log("yere deyiş");
             isGrounded = true;
             canDJump = true;
             isJumping = false;

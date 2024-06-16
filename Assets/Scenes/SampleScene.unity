@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.22210695, g: 0.24669054, b: 0.24759094, a: 1}
+  m_IndirectSpecularColor: {r: 0.2221343, g: 0.24667445, b: 0.24759121, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 278873809}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc6c76beff912ec48a24ed0bd315c2ce, type: 3}
+  m_Script: {fileID: 11500000, guid: cc39e3f60f885ca47804851f0c36098f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   calm: {fileID: 466079678}
@@ -1129,7 +1129,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1591255907}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 241aba1385918de478ff0d6936012f4e, type: 3}
+  m_Script: {fileID: 11500000, guid: dfc167f2980046440af7cc4cda116043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   force: 25
@@ -2106,10 +2106,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 304e6ea2-aef2-4517-b417-f272b9741547
     m_ActionName: Player/Crouch[/Keyboard/ctrl]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9dcfa0c1-75ff-4f6d-b560-7bd4fd84e3fc
-    m_ActionName: Player/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

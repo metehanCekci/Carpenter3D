@@ -23,6 +23,5 @@ public class JumpPad : MonoBehaviour
             other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.up * force;
         }
     }
-
     
 }

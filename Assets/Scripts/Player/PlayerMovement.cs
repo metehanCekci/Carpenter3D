@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float slamForce = 30f;
     [SerializeField] float dashForce = 20f;   // At�lma s�ras�nda uygulanan kuvvet
     [SerializeField] float dashCooldown = 1f; // At�lma i�in bekleme s�resi
-    [SerializeField] float gravity = -9.81f;
+    [SerializeField] private float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
     [SerializeField] float dashCrouchHeight = 1.2f; // Dash sırasında crouch yüksekliği
     [SerializeField] float standingHeight = 2f;
@@ -286,6 +286,7 @@ public class PlayerMovement : MonoBehaviour
             canDJump = true;
             isJumping = false;
             SfxScript.Instance.playFall();
+            rigidBody.velocity = Vector3.up * 0;
         }
     }
 

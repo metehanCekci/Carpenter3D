@@ -225,8 +225,8 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator TiltCamera(Vector3 dashDirection)
     {
-        float tiltDuration = 0.2f; // Kamera eğilme süresi
-        float tiltAngle = 20f; // Kamera eğilme açısı
+        float tiltDuration = 0.15f; // Kamera eğilme süresi
+        float tiltAngle = 10f; // Kamera eğilme açısı
         float originalFOV = mainCamera.fieldOfView;
         float targetFOV = originalFOV;
 
@@ -255,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (dashDirection.x != 0)
             {
-                mainCamera.transform.localRotation = Quaternion.Lerp(originalRotation, targetRotation, time / tiltDuration);
+                mainCamera.transform.localRotation = Quaternion.Lerp(originalRotation, targetRotation, time / tiltDuration*1.8f);//metehan elleme animasyon daha seri olsun diye not : amo
             }
 
             time += Time.deltaTime;

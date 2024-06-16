@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing;
     [HideInInspector] public bool canDash = true;  // At�lma eylemini yapabilme durumu
     private bool isSlamming = false;
-    private bool hasAirDashed = false;  // Yeni değişken
+    public bool hasAirDashed = false;  // Yeni değişken
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;
 

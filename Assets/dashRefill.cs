@@ -20,6 +20,7 @@ public class dashRefill : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             other.gameObject.GetComponent<PlayerMovement>().canDash = true;
+            other.gameObject.GetComponent<PlayerMovement>().hasAirDashed = false;
             Destroy(this.gameObject);
         }
     }

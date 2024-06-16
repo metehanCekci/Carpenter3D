@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDrag = 5f;
     [SerializeField] private float fastFallMultiplier = 10f; // Havada h�zl� ini� i�in ek kuvvet �arpan�
 
-
     private Vector2 moveInput;
     private Vector3 slideDirection;
     private Rigidbody rigidBody;
@@ -30,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing;
     [HideInInspector] public bool canDash = true;  // At�lma eylemini yapabilme durumu
     private bool isSlamming = false;
+    private bool hasAirDashed = false;  // Yeni değişken
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;
 
@@ -69,13 +69,10 @@ public class PlayerMovement : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
-
-
     void FixedUpdate()
     {
         Move();
         ApplyGravity();
-        
     }
 
     void Move()
@@ -151,7 +148,6 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-
     }
 
     void SlamImpact()
@@ -194,9 +190,10 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDash(InputAction.CallbackContext context)
     {
-        if (context.performed && canDash && !isDashing)
+        if (context.performed && canDash && !isDashing && (isGrounded || !hasAirDashed))
         {
             StartCoroutine(Dash());
+            if (!isGrounded) hasAirDashed = true;  // Havada dash yapıldığında işaretle
         }
     }
 
@@ -221,7 +218,6 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);  // Atılma için bekleme süresi
         canDash = true; // Atılma tekrar yapılabilir hale gelir
     }
-
 
     private IEnumerator TiltCamera(Vector3 dashDirection)
     {
@@ -296,12 +292,6 @@ public class PlayerMovement : MonoBehaviour
         mainCamera.transform.localRotation = originalRotation;
     }
 
-
-
-
-
-
-
     private bool OnSlope()
     {
         if (isJumping)
@@ -326,12 +316,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
-    {   
+    {
         /*
         Bitwise operation kullanımına bakılmalı, çok daha verimli
         ve hızlı !!!!!!!!!!!
         */
-        if (collision.gameObject.CompareTag("Ground")) 
+        if (collision.gameObject.CompareTag("Ground"))
         {
             if (isSlamming)
             {
@@ -341,12 +331,10 @@ public class PlayerMovement : MonoBehaviour
                 isSlamming = false;
             }
             isGrounded = true;
+            hasAirDashed = false;  // Yere değdiğinde havada dash durumu sıfırlanır
             canDJump = true;
             isJumping = false;
             SfxScript.Instance.playFall();
-            
-            
-
         }
     }
 

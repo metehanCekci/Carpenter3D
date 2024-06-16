@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.22210543, g: 0.24668942, b: 0.24759015, a: 1}
+  m_IndirectSpecularColor: {r: 0.22210695, g: 0.24669054, b: 0.24759094, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1882,16 +1882,16 @@ MonoBehaviour:
   crouchSpeed: 5
   slideSpeed: 30
   jumpForce: 50
-  slamForce: 30
-  dashForce: 300
+  dashForce: 100
   dashCooldown: 0.5
   gravity: -9.81
   crouchHeight: 0.5
+  dashCrouchHeight: 1.2
   standingHeight: 2
-  slopeForce: 25
   slopeForceRayLength: 1.5
   slopeDrag: 35
   fastFallMultiplier: 350
+  canDash: 1
 --- !u!114 &2036075896
 MonoBehaviour:
   m_ObjectHideFlags: 0

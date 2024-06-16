@@ -6,12 +6,13 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 10f;
     [SerializeField] float crouchSpeed = 5f;  // E�ilme s�ras�nda hareket h�z�
-    [SerializeField] float slideSpeed = 25f;  // Kayma s�ras�nda hareket h�z�
+    [SerializeField] float slideSpeed = 15f;  // Kayma s�ras�nda hareket h�z�
     [SerializeField] float jumpForce = 10f;
     [SerializeField] float dashForce = 20f;   // At�lma s�ras�nda uygulanan kuvvet
     [SerializeField] float dashCooldown = 1f; // At�lma i�in bekleme s�resi
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
+    [SerializeField] float dashCrouchHeight = 1.2f; // Dash sırasında crouch yüksekliği
     [SerializeField] float standingHeight = 2f;
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
@@ -71,20 +72,26 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
-        ApplyGravity();
+        if (!isDashing)
+        {
+            Move();
+            ApplyGravity();
+        }
     }
 
     void Move()
     {
-        if (isDashing) return;  // E�er at�lma yap�l�yorsa hareket etmeyi durdur
+        if (isDashing) return;  // Stop moving if dashing
 
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move;
 
         if (isSliding)
         {
-            move = slideDirection;
+            // Blend the slide direction with the player input direction
+            Vector3 inputDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+            move = (slideDirection + inputDirection * 0.5f).normalized; // Decrease the power of movement during slide
+            slideDirection = move; // Update slide direction for smoother transition
         }
         else
         {
@@ -96,20 +103,20 @@ public class PlayerMovement : MonoBehaviour
             move = Vector3.ProjectOnPlane(move, GetSlopeNormal());
             if (moveInput == Vector2.zero)
             {
-                rigidBody.drag = slopeDrag; // Hareket yokken s�rt�nmeyi art�r
+                rigidBody.drag = slopeDrag; // Increase drag when not moving
             }
             else
             {
-                rigidBody.drag = 0f; // Hareket varken s�rt�nmeyi s�f�rla
+                rigidBody.drag = 0f; // Reset drag when moving
             }
         }
         else
         {
-            rigidBody.drag = 0f; // D�z zeminde s�rt�nmeyi s�f�rla
+            rigidBody.drag = 0f; // Reset drag on flat ground
         }
 
         Vector3 targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
-        rigidBody.velocity = targetVelocity;
+        rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed); // Cap the speed to prevent excessive acceleration
     }
 
     void ApplyGravity()
@@ -169,7 +176,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!isGrounded)
             {
-                // Havada h�zl� ini� yap
+                // Perform fast fall in the air
                 isSlamming = true;
                 rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
             }
@@ -209,87 +216,26 @@ public class PlayerMovement : MonoBehaviour
             dashDirection = transform.forward; // Default direction if no input
         }
 
-        StartCoroutine(TiltCamera(dashDirection)); // Kamera eğilme fonksiyonunu çağır
+        // Change collider height for crouch effect
+        capsuleCollider.height = dashCrouchHeight;
 
-        rigidBody.AddForce(dashDirection.normalized * dashForce, ForceMode.Impulse);
+        // Disable gravity for the duration of the dash
+        rigidBody.useGravity = false;
+        rigidBody.velocity = Vector3.zero; // Reset velocity to ensure clean dash
+        rigidBody.AddForce(dashDirection.normalized * dashForce, ForceMode.VelocityChange);
 
         yield return new WaitForSeconds(0.1f);  // Atılma süresi
+
+        // Reset collider height after dash
+        capsuleCollider.height = standingHeight;
+
+        // Enable gravity again
+        rigidBody.useGravity = true;
+
         isDashing = false;
+
         yield return new WaitForSeconds(dashCooldown);  // Atılma için bekleme süresi
         canDash = true; // Atılma tekrar yapılabilir hale gelir
-    }
-
-    private IEnumerator TiltCamera(Vector3 dashDirection)
-    {
-        float tiltDuration = 0.15f; // Camera tilt duration
-        float tiltAngle = 10f; // Camera tilt angle
-        float originalFOV = mainCamera.fieldOfView;
-        float targetFOV = originalFOV;
-
-        Quaternion originalRotation = mainCamera.transform.localRotation;
-        Quaternion targetRotation = originalRotation;
-
-        // Calculate the direction in the character's local space
-        Vector3 localDashDirection = transform.InverseTransformDirection(dashDirection);
-
-        // Forward or backward dash
-        if (localDashDirection.z != 0)
-        {
-            targetFOV = localDashDirection.z > 0 ? originalFOV + 10 : originalFOV - 10;
-        }
-
-        // Left or right dash
-        if (localDashDirection.x != 0)
-        {
-            targetRotation = Quaternion.Euler(mainCamera.transform.localEulerAngles.x, mainCamera.transform.localEulerAngles.y, -localDashDirection.x * tiltAngle);
-        }
-
-        float time = 0f;
-        while (time < tiltDuration)
-        {
-            if (localDashDirection.z != 0)
-            {
-                mainCamera.fieldOfView = Mathf.Lerp(originalFOV, targetFOV, time / tiltDuration);
-            }
-
-            if (localDashDirection.x != 0)
-            {
-                mainCamera.transform.localRotation = Quaternion.Lerp(originalRotation, targetRotation, time / tiltDuration);
-            }
-
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        if (localDashDirection.z != 0)
-        {
-            mainCamera.fieldOfView = targetFOV;
-        }
-
-        if (localDashDirection.x != 0)
-        {
-            mainCamera.transform.localRotation = targetRotation;
-        }
-
-        time = 0f;
-        while (time < tiltDuration)
-        {
-            if (localDashDirection.z != 0)
-            {
-                mainCamera.fieldOfView = Mathf.Lerp(targetFOV, originalFOV, time / tiltDuration);
-            }
-
-            if (localDashDirection.x != 0)
-            {
-                mainCamera.transform.localRotation = Quaternion.Lerp(targetRotation, originalRotation, time / tiltDuration);
-            }
-
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        mainCamera.fieldOfView = originalFOV;
-        mainCamera.transform.localRotation = originalRotation;
     }
 
     private bool OnSlope()

@@ -225,49 +225,52 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator TiltCamera(Vector3 dashDirection)
     {
-        float tiltDuration = 0.15f; // Kamera eğilme süresi
-        float tiltAngle = 10f; // Kamera eğilme açısı
+        float tiltDuration = 0.15f; // Camera tilt duration
+        float tiltAngle = 10f; // Camera tilt angle
         float originalFOV = mainCamera.fieldOfView;
         float targetFOV = originalFOV;
 
         Quaternion originalRotation = mainCamera.transform.localRotation;
         Quaternion targetRotation = originalRotation;
 
-        // İleri veya geri dash
-        if (dashDirection.z != 0 && dashDirection.x <=0)
+        // Calculate the direction in the character's local space
+        Vector3 localDashDirection = transform.InverseTransformDirection(dashDirection);
+
+        // Forward or backward dash
+        if (localDashDirection.z != 0)
         {
-            targetFOV = dashDirection.z > 0 ? originalFOV + 10 : originalFOV - 10;
+            targetFOV = localDashDirection.z > 0 ? originalFOV + 10 : originalFOV - 10;
         }
 
-        // Sola veya sağa dash
-        if (dashDirection.x != 0 && dashDirection.z <=0)
+        // Left or right dash
+        if (localDashDirection.x != 0)
         {
-            targetRotation = Quaternion.Euler(mainCamera.transform.localEulerAngles.x, mainCamera.transform.localEulerAngles.y, -dashDirection.x * tiltAngle);
+            targetRotation = Quaternion.Euler(mainCamera.transform.localEulerAngles.x, mainCamera.transform.localEulerAngles.y, -localDashDirection.x * tiltAngle);
         }
 
         float time = 0f;
         while (time < tiltDuration)
         {
-            if (dashDirection.z != 0)
+            if (localDashDirection.z != 0)
             {
                 mainCamera.fieldOfView = Mathf.Lerp(originalFOV, targetFOV, time / tiltDuration);
             }
 
-            if (dashDirection.x != 0)
+            if (localDashDirection.x != 0)
             {
-                mainCamera.transform.localRotation = Quaternion.Lerp(originalRotation, targetRotation, time / tiltDuration*1.8f);//metehan elleme animasyon daha seri olsun diye not : amo
+                mainCamera.transform.localRotation = Quaternion.Lerp(originalRotation, targetRotation, time / tiltDuration);
             }
 
             time += Time.deltaTime;
             yield return null;
         }
 
-        if (dashDirection.z != 0)
+        if (localDashDirection.z != 0)
         {
             mainCamera.fieldOfView = targetFOV;
         }
 
-        if (dashDirection.x != 0)
+        if (localDashDirection.x != 0)
         {
             mainCamera.transform.localRotation = targetRotation;
         }
@@ -275,12 +278,12 @@ public class PlayerMovement : MonoBehaviour
         time = 0f;
         while (time < tiltDuration)
         {
-            if (dashDirection.z != 0)
+            if (localDashDirection.z != 0)
             {
                 mainCamera.fieldOfView = Mathf.Lerp(targetFOV, originalFOV, time / tiltDuration);
             }
 
-            if (dashDirection.x != 0)
+            if (localDashDirection.x != 0)
             {
                 mainCamera.transform.localRotation = Quaternion.Lerp(targetRotation, originalRotation, time / tiltDuration);
             }
@@ -292,6 +295,8 @@ public class PlayerMovement : MonoBehaviour
         mainCamera.fieldOfView = originalFOV;
         mainCamera.transform.localRotation = originalRotation;
     }
+
+
 
 
 

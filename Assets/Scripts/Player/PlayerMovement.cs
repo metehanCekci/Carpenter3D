@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isCrouching;
     private bool isSliding;
     private bool isDashing;
-    private bool canDash = true;  // At�lma eylemini yapabilme durumu
+    [HideInInspector] public bool canDash = true;  // At�lma eylemini yapabilme durumu
     private bool isSlamming = false;
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;

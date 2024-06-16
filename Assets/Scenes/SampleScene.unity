@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.2221343, g: 0.24667445, b: 0.24759121, a: 1}
+  m_IndirectSpecularColor: {r: 0.22210695, g: 0.24669054, b: 0.24759094, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -908,6 +908,10 @@ MonoBehaviour:
   mouseSensitivity: 25
   playerBody: {fileID: 2036075892}
   smoothTime: 1
+  tiltAmount: 20
+  tiltSpeed: 5
+  resetSpeed: 10
+  pm: {fileID: 2036075895}
 --- !u!1 &1002906129
 GameObject:
   m_ObjectHideFlags: 0
@@ -2011,6 +2015,7 @@ MonoBehaviour:
   slopeForceRayLength: 1.5
   slopeDrag: 35
   fastFallMultiplier: 500
+  isDashing: 0
   canDash: 1
   hasAirDashed: 0
 --- !u!114 &2036075896

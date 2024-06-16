@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private bool canDJump = true;
     private bool isCrouching;
     private bool isSliding;
-    private bool isDashing;
+    [HideInInspector] public bool isDashing;
     [HideInInspector] public bool canDash = true;  // At�lma eylemini yapabilme durumu
     private bool isSlamming = false;
     public bool hasAirDashed = false;  // Yeni değişken

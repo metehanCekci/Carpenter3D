@@ -67,15 +67,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Slam",
-                    "type": "Button",
-                    "id": "387bc2ed-1d4f-4b3c-9659-8fbd11afa30f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -560,17 +551,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b96f8d9e-d271-4f40-bcaa-5072d18cf156",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Slam",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

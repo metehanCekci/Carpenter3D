@@ -47,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.performed += OnCrouch;
         inputActions.Player.Crouch.canceled += OnCrouchCanceled;
         inputActions.Player.Dash.performed += OnDash;
-        inputActions.Player.Slam.performed += StartSlam;
         inputActions.Player.Enable();
     }
 
@@ -59,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.performed -= OnCrouch;
         inputActions.Player.Crouch.canceled -= OnCrouchCanceled;
         inputActions.Player.Dash.performed -= OnDash;
-        inputActions.Player.Dash.performed -= StartSlam;
         inputActions.Player.Disable();
     }
 
@@ -156,21 +154,6 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    public void StartSlam(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            if (!isGrounded)
-            {
-                isSlamming = true;
-                rigidBody.velocity = Vector3.down * slamForce;
-                //animator.SetTrigger("Slam"); 
-            }
-        }
-
-
-    }
-
     void SlamImpact()
     {
         // Implement effects here, like camera shake, damaging enemies, etc.
@@ -191,6 +174,7 @@ public class PlayerMovement : MonoBehaviour
             else if (!isGrounded)
             {
                 // Havada h�zl� ini� yap
+                isSlamming = true;
                 rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
             }
             else
@@ -266,14 +250,15 @@ public class PlayerMovement : MonoBehaviour
         */
         if (collision.gameObject.CompareTag("Ground")) 
         {
-            
             if (isSlamming)
             {
                 SlamImpact();
                 SfxScript.Instance.playSlam(); //metehan buraya bak
+                Debug.Log("vurdu yer");
                 isGrounded = true;
                 isSlamming = false;
             }
+            Debug.Log("yere deyiş");
             isGrounded = true;
             canDJump = true;
             isJumping = false;

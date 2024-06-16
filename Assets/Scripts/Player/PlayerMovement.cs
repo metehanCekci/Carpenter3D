@@ -4,7 +4,6 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] ReadJson jsonReader;
     [SerializeField] float movementSpeed = 10f;
     [SerializeField] float crouchSpeed = 5f;  // E�ilme s�ras�nda hareket h�z�
     [SerializeField] float slideSpeed = 25f;  // Kayma s�ras�nda hareket h�z�
@@ -137,6 +136,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGrounded)
             {
+                SfxScript.Instance.playJump();
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hızını sıfırla
                 rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 isJumping = true;
@@ -145,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (canDJump)
                 {
+                    SfxScript.Instance.playJump();
                     rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hızını sıfırla
                     rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                     isJumping = true;
@@ -220,6 +221,7 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         canDash = false; // At�lma yap�lamaz hale getir
 
+        SfxScript.Instance.playDash();
         Vector3 dashDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
         if (dashDirection == Vector3.zero)
         {
@@ -268,12 +270,15 @@ public class PlayerMovement : MonoBehaviour
             if (isSlamming)
             {
                 SlamImpact();
+                SfxScript.Instance.playSlam(); //metehan buraya bak
                 isGrounded = true;
                 isSlamming = false;
             }
             isGrounded = true;
             canDJump = true;
             isJumping = false;
+            SfxScript.Instance.playFall();
+            
             
 
         }

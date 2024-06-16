@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.22210543, g: 0.24668942, b: 0.24759015, a: 1}
+  m_IndirectSpecularColor: {r: 0.22210695, g: 0.24669054, b: 0.24759094, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2001,6 +2001,7 @@ MonoBehaviour:
   crouchSpeed: 5
   slideSpeed: 30
   jumpForce: 50
+  slamForce: 100
   dashForce: 100
   dashCooldown: 0.5
   gravity: -10
@@ -2105,6 +2106,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 304e6ea2-aef2-4517-b417-f272b9741547
     m_ActionName: Player/Crouch[/Keyboard/ctrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9dcfa0c1-75ff-4f6d-b560-7bd4fd84e3fc
+    m_ActionName: Player/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float crouchSpeed = 5f;  // E�ilme s�ras�nda hareket h�z�
     [SerializeField] float slideSpeed = 15f;  // Kayma s�ras�nda hareket h�z�
     [SerializeField] float jumpForce = 10f;
+    [SerializeField] float slamForce = 30f;
     [SerializeField] float dashForce = 20f;   // At�lma s�ras�nda uygulanan kuvvet
     [SerializeField] float dashCooldown = 1f; // At�lma i�in bekleme s�resi
     [SerializeField] float gravity = -9.81f;
@@ -174,12 +175,16 @@ public class PlayerMovement : MonoBehaviour
                 slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized;
                 capsuleCollider.height = crouchHeight;
             }
+
+
             else if (!isGrounded)
             {
                 // Perform fast fall in the air
                 isSlamming = true;
-                rigidBody.AddForce(Vector3.down * fastFallMultiplier, ForceMode.Impulse);
+                rigidBody.AddForce(Vector3.down * fastFallMultiplier * slamForce, ForceMode.Impulse);
             }
+
+
             else
             {
                 isCrouching = true;

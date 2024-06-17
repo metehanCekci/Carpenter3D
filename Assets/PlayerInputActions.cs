@@ -89,6 +89,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""860d7891-ae82-4d45-92a0-251dca56cc64"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -573,6 +582,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74f76c0b-ab52-4a76-890e-1515ea02ad52"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1106,6 +1126,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1186,6 +1207,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_Menu;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1197,6 +1219,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @Menu => m_Wrapper.m_Player_Menu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1227,6 +1250,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Crouch.started += instance.OnCrouch;
             @Crouch.performed += instance.OnCrouch;
             @Crouch.canceled += instance.OnCrouch;
+            @Menu.started += instance.OnMenu;
+            @Menu.performed += instance.OnMenu;
+            @Menu.canceled += instance.OnMenu;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1252,6 +1278,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Crouch.started -= instance.OnCrouch;
             @Crouch.performed -= instance.OnCrouch;
             @Crouch.canceled -= instance.OnCrouch;
+            @Menu.started -= instance.OnMenu;
+            @Menu.performed -= instance.OnMenu;
+            @Menu.canceled -= instance.OnMenu;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1396,6 +1425,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnEscape(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnMenu(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

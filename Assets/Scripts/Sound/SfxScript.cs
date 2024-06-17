@@ -40,23 +40,23 @@ public class SfxScript : MonoBehaviour
 
     public void playJump()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Jump);
+        gameObject.GetComponent<AudioSource>().PlayOneShot(Jump);
     }
     public void playDash()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Dash);
+        gameObject.GetComponent<AudioSource>().PlayOneShot(Dash);
     }
     public void playSlide()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Slide);
+        gameObject.GetComponent<AudioSource>().PlayOneShot(Slide);
     }
     public void playSlam()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Slam);
+        gameObject.GetComponent<AudioSource>().PlayOneShot(Slam);
     }
     public void playFall()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Fall);
+        gameObject.GetComponent<AudioSource>().PlayOneShot(Fall);
     }
     public void playAttack()
     {

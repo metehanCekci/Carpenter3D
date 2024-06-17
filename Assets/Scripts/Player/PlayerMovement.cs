@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 moveInput;
     private Vector3 slideDirection;
+    private Vector3 targetVelocity;
     private Rigidbody rigidBody;
     private PlayerInputActions inputActions;
     private bool isGrounded;
@@ -87,17 +88,9 @@ public class PlayerMovement : MonoBehaviour
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move;
 
-        if (isSliding)
-        {
-            // Blend the slide direction with the player input direction
-            Vector3 inputDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
-            move = (slideDirection + inputDirection * 0.5f).normalized; // Decrease the power of movement during slide
-            slideDirection = move; // Update slide direction for smoother transition
-        }
-        else
-        {
+
             move = transform.right * moveInput.x + transform.forward * moveInput.y;
-        }
+        
 
         if (OnSlope())
         {
@@ -115,9 +108,18 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidBody.drag = 0f; // Reset drag on flat ground
         }
-
-        Vector3 targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
+        if(!isSliding)
+        {
+        targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
         rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed); // Cap the speed to prevent excessive acceleration
+        }
+        else
+        {
+            rigidBody.velocity = Vector3.ClampMagnitude(slideDirection, speed); // Cap the speed to prevent excessive acceleration
+        }
+
+
+        
     }
 
     void ApplyGravity()
@@ -206,6 +208,14 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Dash());
             if (!isGrounded) hasAirDashed = true;  // Havada dash yapıldığında işaretle
+        }
+    }
+
+    void Attack(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            Debug.Log("attack");
         }
     }
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.22210695, g: 0.24669054, b: 0.24759094, a: 1}
+  m_IndirectSpecularColor: {r: 0.22210543, g: 0.24668942, b: 0.24759015, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1657105500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02b60670d181a1c4d97d70996576fd83, type: 3}
+  m_Script: {fileID: 11500000, guid: ce71f26d5c75e0448adde143d9685d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!65 &1657105503
@@ -2002,7 +2002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 20
-  crouchSpeed: 5
+  crouchSpeed: 10
   slideSpeed: 30
   jumpForce: 50
   slamForce: 100

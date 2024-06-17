@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool attacking = false;
     bool readyToAttack = true;
-    
+
 
     void Awake()
     {
@@ -102,8 +102,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move;
 
 
-            move = transform.right * moveInput.x + transform.forward * moveInput.y;
-        
+        move = transform.right * moveInput.x + transform.forward * moveInput.y;
+
 
         if (OnSlope())
         {
@@ -121,10 +121,10 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidBody.drag = 0f; // Reset drag on flat ground
         }
-        if(!isSliding)
+        if (!isSliding)
         {
-        targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
-        rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed); // Cap the speed to prevent excessive acceleration
+            targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
+            rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed); // Cap the speed to prevent excessive acceleration
         }
         else
         {
@@ -132,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        
+
     }
 
     void ApplyGravity()
@@ -176,6 +176,8 @@ public class PlayerMovement : MonoBehaviour
     void SlamImpact()
     {
         // Implement effects here, like camera shake, damaging enemies, etc.
+        SfxScript.Instance.playSlam();
+        isSlamming = false;
         Debug.Log("Slam Impact!");
     }
 
@@ -187,7 +189,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 isSliding = true;
                 isCrouching = true;
-                slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized;
+                slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized * slideSpeed;
                 capsuleCollider.height = crouchHeight;
             }
 
@@ -227,17 +229,17 @@ public class PlayerMovement : MonoBehaviour
     void OnFire(InputAction.CallbackContext context)
     {
 
-        if(!readyToAttack || attacking) return;
+        if (!readyToAttack || attacking) return;
 
         readyToAttack = false;
         attacking = true;
 
-        Invoke(nameof(ResetAttack),attackSpeed);
-        Invoke(nameof(AttackRaycast),attackDelay);
+        Invoke(nameof(ResetAttack), attackSpeed);
+        Invoke(nameof(AttackRaycast), attackDelay);
 
         SfxScript.Instance.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
         SfxScript.Instance.playAttack();
-        
+
     }
 
     void ResetAttack()
@@ -248,15 +250,15 @@ public class PlayerMovement : MonoBehaviour
 
     void AttackRaycast()
     {
-        if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit , attackDistance,attacklayer))
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, attackDistance, attacklayer))
         {
-            HitTarget(hit , hit.point);
+            HitTarget(hit, hit.point);
         }
     }
 
     void HitTarget(RaycastHit hit, Vector3 pos)
     {
-        if(hit.collider.gameObject.CompareTag("Hitable"))
+        if (hit.collider.gameObject.CompareTag("Hitable"))
         {
             SfxScript.Instance.playHit();
         }
@@ -330,9 +332,7 @@ public class PlayerMovement : MonoBehaviour
             if (isSlamming)
             {
                 SlamImpact();
-                SfxScript.Instance.playSlam();
-                isGrounded = true;
-                isSlamming = false;
+
             }
             isGrounded = true;
             hasAirDashed = false;  // Yere değdiğinde havada dash durumu sıfırlanır

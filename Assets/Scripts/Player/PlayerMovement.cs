@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -36,6 +37,16 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;
 
+    public float attackDistance = 3f;
+    public float attackDelay = 0.4f;
+    public float attackSpeed = 1f;
+    public int attackDamage = 1;
+    public LayerMask attacklayer;
+
+    bool attacking = false;
+    bool readyToAttack = true;
+    
+
     void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -50,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.performed += OnCrouch;
         inputActions.Player.Crouch.canceled += OnCrouchCanceled;
         inputActions.Player.Dash.performed += OnDash;
+        inputActions.Player.Fire.performed += OnFire;
         inputActions.Player.Enable();
     }
 
@@ -61,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.performed -= OnCrouch;
         inputActions.Player.Crouch.canceled -= OnCrouchCanceled;
         inputActions.Player.Dash.performed -= OnDash;
+        inputActions.Player.Fire.performed -= OnFire;
         inputActions.Player.Disable();
     }
 
@@ -211,11 +224,41 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Attack(InputAction.CallbackContext context)
+    void OnFire(InputAction.CallbackContext context)
     {
-        if(context.performed)
+
+        if(!readyToAttack || attacking) return;
+
+        readyToAttack = false;
+        attacking = true;
+
+        Invoke(nameof(ResetAttack),attackSpeed);
+        Invoke(nameof(AttackRaycast),attackDelay);
+
+        SfxScript.Instance.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
+        SfxScript.Instance.playAttack();
+        
+    }
+
+    void ResetAttack()
+    {
+        attacking = false;
+        readyToAttack = true;
+    }
+
+    void AttackRaycast()
+    {
+        if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit , attackDistance,attacklayer))
         {
-            Debug.Log("attack");
+            HitTarget(hit , hit.point);
+        }
+    }
+
+    void HitTarget(RaycastHit hit, Vector3 pos)
+    {
+        if(hit.collider.gameObject.CompareTag("Hitable"))
+        {
+            SfxScript.Instance.playHit();
         }
     }
 

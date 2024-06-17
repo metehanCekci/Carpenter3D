@@ -11,6 +11,8 @@ public class SfxScript : MonoBehaviour
     [SerializeField] AudioClip Slide;
     [SerializeField] AudioClip Slam;
     [SerializeField] AudioClip Fall;
+    [SerializeField] AudioClip Attack;
+    [SerializeField] AudioClip Hit;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,5 +57,13 @@ public class SfxScript : MonoBehaviour
     public void playFall()
     {
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(Fall);
+    }
+    public void playAttack()
+    {
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Attack);
+    }
+    public void playHit()
+    {
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Hit);
     }
 }

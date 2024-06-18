@@ -160,6 +160,12 @@ public class PlayerMovement : MonoBehaviour
                 isWalking = true;
                 if(isGrounded)
                 transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
+                else transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+            }
+            else if(context.canceled)
+            {
+            transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+            isWalking = false;
             }
             else if (isGrounded)
             {
@@ -171,7 +177,6 @@ public class PlayerMovement : MonoBehaviour
                 isWalking = false;
             }
 
-        Debug.Log(isWalking);
 
     }
 

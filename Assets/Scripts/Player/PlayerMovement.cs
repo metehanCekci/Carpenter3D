@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float slamForce = 30f;
     [SerializeField] float dashForce = 20f;   // At�lma s�ras�nda uygulanan kuvvet
     [SerializeField] float dashCooldown = 1f; // At�lma i�in bekleme s�resi
-    [SerializeField] private float gravity = -9.81f;
+    [SerializeField]  float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
     [SerializeField] float dashCrouchHeight = 1.2f; // Dash sırasında crouch yüksekliği
     [SerializeField] float standingHeight = 2f;
@@ -133,7 +133,11 @@ public class PlayerMovement : MonoBehaviour
         if (!isSliding)
         {
             targetVelocity = new Vector3(move.x * speed, rigidBody.velocity.y, move.z * speed);
-            rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed); // Cap the speed to prevent excessive acceleration
+
+            //Sınırlamayı (clamp) kaldırarak daha hızlı düşüş sağlanıyor
+            rigidBody.velocity = targetVelocity; 
+            
+            //rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed);  Cap the speed to prevent excessive acceleration
         }
         else
         {

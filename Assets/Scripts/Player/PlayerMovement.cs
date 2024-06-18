@@ -237,6 +237,9 @@ public class PlayerMovement : MonoBehaviour
         Invoke(nameof(ResetAttack), attackSpeed);
         Invoke(nameof(AttackRaycast), attackDelay);
 
+        transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("Attack");
+
+
         SfxScript.Instance.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
         SfxScript.Instance.playAttack();
 

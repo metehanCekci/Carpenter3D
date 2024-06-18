@@ -20,6 +20,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slopeDrag = 5f;
     [SerializeField] private float fastFallMultiplier = 10f; // Havada h�zl� ini� i�in ek kuvvet �arpan�
 
+    [SerializeField] private float duration;
+    [SerializeField] private float magnitude;
+
+    [SerializeField] GameObject bloodEffectPrefab;
+
     private Vector2 moveInput;
     private Vector3 slideDirection;
     private Vector3 targetVelocity;
@@ -36,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     public bool hasAirDashed = false;  // Yeni değişken
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;
+    private CameraShake cameraShake; // Reference to the CameraShake script
 
     public float attackDistance = 3f;
     public float attackDelay = 0.4f;
@@ -46,11 +52,11 @@ public class PlayerMovement : MonoBehaviour
     bool attacking = false;
     bool readyToAttack = true;
 
-
     void Awake()
     {
         inputActions = new PlayerInputActions();
         mainCamera = Camera.main;
+        cameraShake = mainCamera.GetComponent<CameraShake>(); // Initialize the camera shake reference
     }
 
     void OnEnable()
@@ -101,9 +107,7 @@ public class PlayerMovement : MonoBehaviour
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move;
 
-
         move = transform.right * moveInput.x + transform.forward * moveInput.y;
-
 
         if (OnSlope())
         {
@@ -130,9 +134,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidBody.velocity = Vector3.ClampMagnitude(slideDirection, speed); // Cap the speed to prevent excessive acceleration
         }
-
-
-
     }
 
     void ApplyGravity()
@@ -192,16 +193,12 @@ public class PlayerMovement : MonoBehaviour
                 slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized * slideSpeed;
                 capsuleCollider.height = crouchHeight;
             }
-
-
             else if (!isGrounded)
             {
                 // Perform fast fall in the air
                 isSlamming = true;
                 rigidBody.AddForce(Vector3.down * fastFallMultiplier * slamForce, ForceMode.Impulse);
             }
-
-
             else
             {
                 isCrouching = true;
@@ -228,7 +225,6 @@ public class PlayerMovement : MonoBehaviour
 
     void OnFire(InputAction.CallbackContext context)
     {
-
         if (!readyToAttack || attacking) return;
 
         readyToAttack = false;
@@ -239,10 +235,8 @@ public class PlayerMovement : MonoBehaviour
 
         transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("Attack");
 
-
         SfxScript.Instance.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
         SfxScript.Instance.playAttack();
-
     }
 
     void ResetAttack()
@@ -257,6 +251,22 @@ public class PlayerMovement : MonoBehaviour
         {
             HitTarget(hit, hit.point);
         }
+        else if (Physics.Raycast(mainCamera.transform.position + new Vector3(0.5f, 0, 0), mainCamera.transform.forward, out RaycastHit hit2, attackDistance, attacklayer))
+        {
+            HitTarget(hit2, hit2.point);
+        }
+        else if (Physics.Raycast(mainCamera.transform.position + new Vector3(0.7f, 0, 0), mainCamera.transform.forward, out RaycastHit hit3, attackDistance, attacklayer))
+        {
+            HitTarget(hit3, hit3.point);
+        }
+        else if (Physics.Raycast(mainCamera.transform.position + new Vector3(-0.5f, 0, 0), mainCamera.transform.forward, out RaycastHit hit4, attackDistance, attacklayer))
+        {
+            HitTarget(hit4, hit4.point);
+        }
+        else if (Physics.Raycast(mainCamera.transform.position + new Vector3(-0.7f, 0, 0), mainCamera.transform.forward, out RaycastHit hit5, attackDistance, attacklayer))
+        {
+            HitTarget(hit5, hit5.point);
+        }
     }
 
     void HitTarget(RaycastHit hit, Vector3 pos)
@@ -264,7 +274,20 @@ public class PlayerMovement : MonoBehaviour
         if (hit.collider.gameObject.CompareTag("Hitable"))
         {
             SfxScript.Instance.playHit();
+            //Time.timeScale = 0.05f;
+            this.gameObject.transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 0.01f;
+            GameObject clone = Instantiate(bloodEffectPrefab);
+            clone.SetActive(true);
+            clone.transform.position = hit.transform.gameObject.transform.position;
+            Destroy(clone,2);
+            Invoke("recoverTime",0.20f);
         }
+    }
+
+    private void recoverTime()
+    {
+        //Time.timeScale = 1;
+        this.gameObject.transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 1;
     }
 
     private IEnumerator Dash()
@@ -335,7 +358,6 @@ public class PlayerMovement : MonoBehaviour
             if (isSlamming)
             {
                 SlamImpact();
-
             }
             isGrounded = true;
             hasAirDashed = false;  // Yere değdiğinde havada dash durumu sıfırlanır

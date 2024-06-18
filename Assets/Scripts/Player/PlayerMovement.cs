@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isDashing;
     [HideInInspector] public bool canDash = true;  // At�lma eylemini yapabilme durumu
     private bool isSlamming = false;
+    private bool isWalking = false;
     public bool hasAirDashed = false;  // Yeni değişken
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;
@@ -98,11 +99,15 @@ public class PlayerMovement : MonoBehaviour
             Move();
             ApplyGravity();
         }
+
+
     }
 
     void Move()
     {
         if (isDashing) return;  // Stop moving if dashing
+
+
 
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move;
@@ -147,6 +152,27 @@ public class PlayerMovement : MonoBehaviour
     void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
+
+
+
+            if (context.performed)
+            {
+                isWalking = true;
+                if(isGrounded)
+                transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
+            }
+            else if (isGrounded)
+            {
+                transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                isWalking = false;
+            }
+            else
+            {
+                isWalking = false;
+            }
+
+        Debug.Log(isWalking);
+
     }
 
     void OnJump(InputAction.CallbackContext context)
@@ -155,6 +181,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGrounded)
             {
+                transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
                 SfxScript.Instance.playJump();
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hızını sıfırla
                 rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -279,8 +306,8 @@ public class PlayerMovement : MonoBehaviour
             GameObject clone = Instantiate(bloodEffectPrefab);
             clone.SetActive(true);
             clone.transform.position = hit.transform.gameObject.transform.position;
-            Destroy(clone,2);
-            Invoke("recoverTime",0.20f);
+            Destroy(clone, 2);
+            Invoke("recoverTime", 0.20f);
         }
     }
 
@@ -359,6 +386,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 SlamImpact();
             }
+            if (isWalking) transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
             isGrounded = true;
             hasAirDashed = false;  // Yere değdiğinde havada dash durumu sıfırlanır
             canDJump = true;

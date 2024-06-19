@@ -309,6 +309,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (hit.collider.gameObject.CompareTag("Hitable"))
         {
+            SfxScript.Instance.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
             SfxScript.Instance.playHit();
             //Time.timeScale = 0.05f;
             this.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 0.01f;
@@ -324,6 +325,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //Time.timeScale = 1;
         this.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 1;
+        SfxScript.Instance.gameObject.GetComponent<AudioSource>().pitch = 1;
     }
 
     private IEnumerator Dash()

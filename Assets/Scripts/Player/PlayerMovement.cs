@@ -163,17 +163,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 isWalking = true;
                 if(isGrounded)
-                transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
-                else transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
+                else transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
             }
             else if(context.canceled)
             {
-            transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+            transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
             isWalking = false;
             }
             else if (isGrounded)
             {
-                transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
                 isWalking = false;
             }
             else
@@ -190,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGrounded)
             {
-                transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
                 SfxScript.Instance.playJump();
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); // Y ekseni hızını sıfırla
                 rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -269,7 +269,7 @@ public class PlayerMovement : MonoBehaviour
         Invoke(nameof(ResetAttack), attackSpeed);
         Invoke(nameof(AttackRaycast), attackDelay);
 
-        transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("Attack");
+        transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("Attack");
 
         SfxScript.Instance.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
         SfxScript.Instance.playAttack();
@@ -311,7 +311,7 @@ public class PlayerMovement : MonoBehaviour
         {
             SfxScript.Instance.playHit();
             //Time.timeScale = 0.05f;
-            this.gameObject.transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 0.01f;
+            this.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 0.01f;
             GameObject clone = Instantiate(bloodEffectPrefab);
             clone.SetActive(true);
             clone.transform.position = hit.transform.gameObject.transform.position;
@@ -323,7 +323,7 @@ public class PlayerMovement : MonoBehaviour
     private void recoverTime()
     {
         //Time.timeScale = 1;
-        this.gameObject.transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 1;
+        this.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 1;
     }
 
     private IEnumerator Dash()
@@ -395,7 +395,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 SlamImpact();
             }
-            if (isWalking) transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
+            if (isWalking) transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
             isGrounded = true;
             hasAirDashed = false;  // Yere değdiğinde havada dash durumu sıfırlanır
             canDJump = true;

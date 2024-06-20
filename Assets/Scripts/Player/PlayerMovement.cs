@@ -30,14 +30,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 targetVelocity;
     private Rigidbody rigidBody;
     private PlayerInputActions inputActions;
-    private bool isGrounded;
+    [HideInInspector] public bool isGrounded;
     private bool isJumping;
     private bool canDJump = true;
     private bool isCrouching;
     private bool isSliding;
     [HideInInspector] public bool isDashing;
     [HideInInspector] public bool canDash = true;  // At�lma eylemini yapabilme durumu
-    private bool isSlamming = false;
+    [HideInInspector] public bool isSlamming = false;
     private bool isWalking = false;
     public bool hasAirDashed = false;  // Yeni değişken
     private CapsuleCollider capsuleCollider;
@@ -210,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void SlamImpact()
+    public void SlamImpact()
     {
         // Implement effects here, like camera shake, damaging enemies, etc.
         SfxScript.Instance.playSlam();
@@ -234,6 +234,7 @@ public class PlayerMovement : MonoBehaviour
                 // Perform fast fall in the air
                 isSlamming = true;
                 rigidBody.AddForce(Vector3.down * fastFallMultiplier * slamForce, ForceMode.Impulse);
+                Debug.Log(rigidBody.velocity.y);
             }
             else
             {
@@ -410,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("StackingTrampoline"))
         {
             isGrounded = false;
         }
@@ -418,7 +419,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("StackingTrampoline"))
         {
             isGrounded = true;
             canDJump = true;

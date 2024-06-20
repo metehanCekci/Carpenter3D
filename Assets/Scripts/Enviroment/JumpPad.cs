@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JumpPad : MonoBehaviour
 {
-    [SerializeField] float force = 25;
+    [SerializeField] float force = 25f;
     // Start is called before the first frame update
     void Start()
     {

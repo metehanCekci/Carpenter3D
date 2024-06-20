@@ -6,13 +6,15 @@ public class musicSwapper : MonoBehaviour
 {
     [SerializeField] AudioSource calm;
     [SerializeField] AudioSource combat;
-    [SerializeField] bool phaseToCombat = false;
+    [SerializeField] public bool phaseToCombat = false;
 
-    [SerializeField] bool phaseToCalm = false;
+    [SerializeField] public bool phaseToCalm = false;
 
     [SerializeField] float phaseSpeed = 0.5f;
 
     [SerializeField] float audioLevel = 0.25f;
+
+    [SerializeField] bool hasPhased = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,7 +46,9 @@ public class musicSwapper : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!hasPhased)
         if (other.gameObject.CompareTag("Player"))
+        {
             if (phaseToCombat == false)
             {
                 phaseToCombat = true;
@@ -55,6 +59,8 @@ public class musicSwapper : MonoBehaviour
                 phaseToCalm = true;
                 phaseToCombat = false;
             }
+            hasPhased = true;
+        }
 
     }
 }

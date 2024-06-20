@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class FollowScript : MonoBehaviour
 {
-
+    public bool isFollowing = false;
     public Transform target;
     // Start is called before the first frame update
     void Start()
@@ -16,7 +16,9 @@ public class FollowScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(target != null)
+        if(target != null && isFollowing)
         this.gameObject.GetComponent<NavMeshAgent>().SetDestination(target.position);
     }
+
+
 }

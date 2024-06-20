@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     public float attackDistance = 3f;
     public float attackDelay = 0.4f;
     public float attackSpeed = 1f;
-    public int attackDamage = 1;
+    public float attackDamage = 10;
     public LayerMask attacklayer;
 
     bool attacking = false;
@@ -309,6 +309,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (hit.collider.gameObject.CompareTag("Hitable"))
         {
+            hit.transform.gameObject.GetComponent<EnemyHealthScript>().takeDamage(attackDamage);
             SfxScript.Instance.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
             SfxScript.Instance.playHit();
             //Time.timeScale = 0.05f;

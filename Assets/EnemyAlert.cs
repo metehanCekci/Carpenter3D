@@ -6,10 +6,21 @@ public class EnemyAlert : MonoBehaviour
 {
     public GameObject[] gameObjectsToFollow; // Eleman sayısı belli olmayan dizi
     public int count = 0;
+    public DoorScript[] doorScripts;
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            
+            
+                foreach (DoorScript obj in doorScripts)
+                {
+                    obj.doorLocked = true;
+                }
+            
+            
+            
+
             foreach (GameObject obj in gameObjectsToFollow)
             {
                 FollowScript followScript = obj.GetComponent<FollowScript>();
@@ -37,16 +48,18 @@ public class EnemyAlert : MonoBehaviour
         }
         if (count >= gameObjectsToFollow.Length)
         {
-            if (this.gameObject.GetComponent<musicSwapper>().phaseToCalm)
-            {
-                this.gameObject.GetComponent<musicSwapper>().phaseToCombat = true;
-                this.gameObject.GetComponent<musicSwapper>().phaseToCalm = false;
-            }
-            else
-            {
-                this.gameObject.GetComponent<musicSwapper>().phaseToCalm = true;
-                this.gameObject.GetComponent<musicSwapper>().phaseToCombat = false;
-            }
+            this.gameObject.GetComponent<musicSwapper>().phaseToCombat = true;
+            this.gameObject.GetComponent<musicSwapper>().phaseToCalm = true;
+            
+            
+                foreach (DoorScript obj in doorScripts)
+                {
+                    obj.doorLocked = false;
+                }
+            
+            
+            
+
             this.enabled = false;
         }
 

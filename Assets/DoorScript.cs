@@ -9,6 +9,8 @@ public class DoorScript : MonoBehaviour
     public float yAmt;
     public float zAmt;
 
+    public bool doorLocked = false;
+
     private bool doorOpening = false;
     private bool doorClosing = false;
     private bool doorIsClosed = true;
@@ -44,6 +46,7 @@ public class DoorScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            if(!doorLocked)
 
                 doorOpening = true;
             

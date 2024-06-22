@@ -1599,6 +1599,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music(Combat)
       objectReference: {fileID: 0}
+    - target: {fileID: 8423186492826429720, guid: a8f9406a4ecd40e4f85fc6d8a6bf29b4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1745,6 +1749,10 @@ PrefabInstance:
     - target: {fileID: 4472662026909911715, guid: 3e0852fe8c005a6409fda35da4976c32, type: 3}
       propertyPath: m_Name
       value: Music(Calm)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4472662026909911715, guid: 3e0852fe8c005a6409fda35da4976c32, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6922523203006222556, guid: 3e0852fe8c005a6409fda35da4976c32, type: 3}
       propertyPath: m_LocalPosition.x

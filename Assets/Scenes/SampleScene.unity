@@ -173,8 +173,8 @@ MonoBehaviour:
   pm: {fileID: 245649163}
   baseJumpForce: 10
   slamMultiplier: 2
-  multiplyScale: 2
-  resetTime: 5
+  multiplyBy: 2
+  resetTime: 2
 --- !u!65 &88450950
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 229286709}
   - component: {fileID: 229286708}
   - component: {fileID: 229286707}
+  - component: {fileID: 229286711}
   m_Layer: 6
   m_Name: Capsule
   m_TagString: Hitable
@@ -463,6 +464,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &229286711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229286706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d523fd8be2d7547babbff4728d8511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 100
 --- !u!114 &245649163 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7793771309564974662, guid: de97480b99c685f4ebecb7823d91980f, type: 3}
@@ -1642,6 +1656,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7335194254365330860, guid: de97480b99c685f4ebecb7823d91980f, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 7793771309564974662, guid: de97480b99c685f4ebecb7823d91980f, type: 3}
       propertyPath: bloodEffectPrefab
       value: 
@@ -1659,6 +1677,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 326807263845990003, guid: 53afcb2c7f0e0ad4f959f174d80215d2, type: 3}
+      propertyPath: lengthInSec
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 326807263845990003, guid: 53afcb2c7f0e0ad4f959f174d80215d2, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 466759573056407601, guid: 53afcb2c7f0e0ad4f959f174d80215d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.682883

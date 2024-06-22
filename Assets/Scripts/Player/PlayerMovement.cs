@@ -147,10 +147,8 @@ public class PlayerMovement : MonoBehaviour
 
     void ApplyGravity()
     {
-        if (!isGrounded)
-        {
             rigidBody.AddForce(new Vector3(0, gravity, 0), ForceMode.Acceleration);
-        }
+        
     }
 
     void OnMove(InputAction.CallbackContext context)

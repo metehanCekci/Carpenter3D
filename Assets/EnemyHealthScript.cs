@@ -15,7 +15,8 @@ public class EnemyHealthScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.GetChild(0).GetComponent<TMP_Text>().text = hp.ToString();
+        //SORUN ÇIKARMAMASI İÇİN YORUM YAPTIM
+        //transform.GetChild(0).GetComponent<TMP_Text>().text = hp.ToString();
     }
 
     public void takeDamage(float damageAmt)

@@ -48,7 +48,7 @@ public class EnemyAlert : MonoBehaviour
         }
         if (count >= gameObjectsToFollow.Length)
         {
-            this.gameObject.GetComponent<musicSwapper>().phaseToCombat = true;
+            this.gameObject.GetComponent<musicSwapper>().phaseToCombat = false;
             this.gameObject.GetComponent<musicSwapper>().phaseToCalm = true;
             
             

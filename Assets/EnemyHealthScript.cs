@@ -31,6 +31,6 @@ public class EnemyHealthScript : MonoBehaviour
 
     public void death()
     {
-        Destroy(gameObject);
+        this.gameObject.SetActive(false);
     }
 }

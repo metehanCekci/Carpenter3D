@@ -46,6 +46,7 @@ public class musicSwapper : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!hasPhased)
         if (other.gameObject.CompareTag("Player"))
         {
             if (phaseToCombat == false)
@@ -58,6 +59,7 @@ public class musicSwapper : MonoBehaviour
                 phaseToCalm = true;
                 phaseToCombat = false;
             }
+            hasPhased = true;
             
         }
 

@@ -4,6 +4,8 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance { get; private set; }
+
     [SerializeField] float movementSpeed = 10f;
     [SerializeField] float crouchSpeed = 5f;  
     [SerializeField] float slideSpeed = 15f;  
@@ -21,8 +23,12 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float duration;
     [SerializeField] private float magnitude;
+    private bool iFrames = false;
+    private bool parryCoolDown = false;
 
     [SerializeField] GameObject bloodEffectPrefab;
+
+    [HideInInspector] public bool parrySuccessful = false;
 
     private Vector2 moveInput;
     private Vector3 slideDirection;
@@ -54,6 +60,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Optional: To keep the singleton across scenes
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         inputActions = new PlayerInputActions();
         mainCamera = Camera.main;
         cameraShake = mainCamera.GetComponent<CameraShake>(); 
@@ -68,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.canceled += OnCrouchCanceled;
         inputActions.Player.Dash.performed += OnDash;
         inputActions.Player.Fire.performed += OnFire;
+        inputActions.Player.Parry.performed += OnParry;
         inputActions.Player.Enable();
     }
 
@@ -80,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Crouch.canceled -= OnCrouchCanceled;
         inputActions.Player.Dash.performed -= OnDash;
         inputActions.Player.Fire.performed -= OnFire;
+        inputActions.Player.Parry.performed -= OnParry;
         inputActions.Player.Disable();
     }
 
@@ -93,6 +112,11 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(iFrames) Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),LayerMask.NameToLayer("HitBox"),true);
+        else 
+        {
+            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),LayerMask.NameToLayer("HitBox"),false);                  
+        }
         if (!isDashing)
         {
             Move();
@@ -132,9 +156,41 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void OnParry(InputAction.CallbackContext context)
+    {
+        if(!parryCoolDown)
+        StartCoroutine(parry());
+    }
+
+    IEnumerator parry()
+    {
+        parrySuccessful = true;
+        yield return new WaitForSeconds(0.1f);
+        if(!parrySuccessful);
+        else
+        {
+        parrySuccessful = false;
+        parryCoolDown = true;
+        yield return new WaitForSeconds(1);
+        parryCoolDown = false;
+        }
+    }
+
     void ApplyGravity()
     {
         rigidBody.AddForce(new Vector3(0, gravity, 0), ForceMode.Acceleration);
+    }
+
+    public void startIFrames()
+    {
+        StartCoroutine(IFrames());
+    }
+
+    IEnumerator IFrames()
+    {
+        iFrames = true;
+        yield return new WaitForSeconds(0.3f);
+        iFrames = false;
     }
 
     void OnMove(InputAction.CallbackContext context)
@@ -318,15 +374,12 @@ public class PlayerMovement : MonoBehaviour
             dashDirection = transform.forward; 
         }
 
-        capsuleCollider.height = dashCrouchHeight;
 
         rigidBody.useGravity = false;
         rigidBody.velocity = Vector3.zero; 
         rigidBody.AddForce(dashDirection.normalized * dashForce, ForceMode.VelocityChange);
-
+        StartCoroutine(IFrames());
         yield return new WaitForSeconds(0.1f); 
-
-        capsuleCollider.height = standingHeight;
 
         rigidBody.useGravity = true;
 
@@ -334,6 +387,9 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(dashCooldown); 
         canDash = true; 
+
+         
+
     }
 
     private bool OnSlope()

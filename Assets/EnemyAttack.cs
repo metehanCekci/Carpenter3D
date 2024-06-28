@@ -6,14 +6,12 @@ using UnityEngine.AI;
 
 public class EnemyAttack : MonoBehaviour
 {
-    public GameObject attackPos;
     public GameObject slashEffect;
     public GameObject slashEffect2;
 
     public float firstAttackTiming;
     public float secondAttackTiming;
   
-    public float radius;
 
     private bool isAttacking = false;
     // Start is called before the first frame update
@@ -47,7 +45,7 @@ public class EnemyAttack : MonoBehaviour
         slashEffect.SetActive(true);
         this.gameObject.GetComponent<NavMeshAgent>().speed = 20;
         yield return new WaitForSeconds(0.1f);
-        slashEffect.GetComponent<BoxCollider>().enabled = false;
+        slashEffect.transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
         yield return new WaitForSeconds(0.2f);
         slashEffect.SetActive(false);
@@ -55,14 +53,14 @@ public class EnemyAttack : MonoBehaviour
         slashEffect2.SetActive(true);
        this.gameObject.GetComponent<NavMeshAgent>().speed = 20;
         yield return new WaitForSeconds(0.1f);
-        slashEffect2.GetComponent<BoxCollider>().enabled = false;
+        slashEffect2.transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
         yield return new WaitForSeconds(0.2f);
         slashEffect2.SetActive(false);
 
         //Collider[] hitEnemies = Physics.OverlapSphere(attackPos.transform.position, radius);
-        slashEffect.GetComponent<BoxCollider>().enabled = true;
-        slashEffect2.GetComponent<BoxCollider>().enabled = true;
+        slashEffect.transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
+        slashEffect2.transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
         isAttacking = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 3;
 

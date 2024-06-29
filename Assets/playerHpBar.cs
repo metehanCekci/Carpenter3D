@@ -11,6 +11,8 @@ public class PlayerHpBar : MonoBehaviour
     public float playerHp = 100f; // Oyuncunun can puanı
     public float maxHp = 100f; // Maksimum can puanı
     private Image hpBarImage; // Can barının Image bileşeni
+    [SerializeField] PlayerMovement pm;
+    [SerializeField] Canvas deathMenu;
 
     // Awake is called when the script instance is being loaded
     void Awake()
@@ -41,6 +43,12 @@ public class PlayerHpBar : MonoBehaviour
         float fillAmount = playerHp / maxHp;
         hpBarImage.fillAmount = fillAmount;
 
-        if(playerHp<0) SceneManager.LoadScene(0);
+        if(playerHp<0) {
+            Time.timeScale = 0;
+            pm.isDead = true;
+            deathMenu.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+            }
     }
 }

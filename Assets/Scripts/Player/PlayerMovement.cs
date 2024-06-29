@@ -27,8 +27,9 @@ public class PlayerMovement : MonoBehaviour
     private bool parryCoolDown = false;
 
     [SerializeField] GameObject bloodEffectPrefab;
-
+    [SerializeField] PauseMenuScript pauseScript;
     [HideInInspector] public bool parrySuccessful = false;
+    [HideInInspector] public bool isDead = false;
 
     private Vector2 moveInput;
     private Vector3 slideDirection;
@@ -126,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        if (isDashing) return; 
+        if (isDashing && !isDead && !pauseScript.isPaused) return; 
 
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
@@ -225,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !isDead && !pauseScript.isPaused)
         {
             if (isGrounded)
             {
@@ -258,7 +259,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !isDead && !pauseScript.isPaused)
         {
             if (isGrounded && moveInput != Vector2.zero)
             {
@@ -289,7 +290,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDash(InputAction.CallbackContext context)
     {
-        if (context.performed && canDash && !isDashing && (isGrounded || !hasAirDashed))
+        if (context.performed && canDash && !isDashing && !isDead && !pauseScript.isPaused && (isGrounded || !hasAirDashed))
         {
             StartCoroutine(Dash());
             if (!isGrounded) hasAirDashed = true; 
@@ -298,7 +299,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnFire(InputAction.CallbackContext context)
     {
-        if (!readyToAttack || attacking) return;
+        if (!readyToAttack || attacking || isDead || pauseScript.isPaused) return;
 
         readyToAttack = false;
         attacking = true;

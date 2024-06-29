@@ -164,6 +164,7 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator parry()
     {
+        transform.GetChild(0).GetChild(0).GetChild(2).GetComponent<Animator>().SetTrigger("Parry");
         parrySuccessful = true;
         yield return new WaitForSeconds(0.1f);
         if(!parrySuccessful);
@@ -174,6 +175,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(1);
         parryCoolDown = false;
         }
+
     }
 
     void ApplyGravity()

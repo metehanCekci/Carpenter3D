@@ -8,6 +8,11 @@ TagManager:
   - Hitable
   - StackingTrampoline
   - SecondCamera
+  - Platform
+  - ParryKnife
+  - Weapons
+  - Arms
+  - pauseBack
   layers:
   - Default
   - TransparentFX
@@ -19,7 +24,7 @@ TagManager:
   - UI
   - HitBox
   - Player
-  - 
+  - Platform
   - 
   - 
   - 

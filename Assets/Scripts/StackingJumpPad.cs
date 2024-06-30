@@ -31,16 +31,12 @@ public class StackingJumpPad : MonoBehaviour
                 slamMultiplier*=multiplyBy;
                 pm.SlamImpact();
             }
-            
-
-            
         }
     }
 
 
     void Update()
     {
-        Debug.Log(pm.isGrounded);   
         if (isSlammed && Time.time - lastSlamTime > resetTime)
         {
             isSlammed = false;

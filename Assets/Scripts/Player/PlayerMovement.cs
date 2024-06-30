@@ -5,19 +5,19 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 10f;
-    [SerializeField] float crouchSpeed = 5f;  
-    [SerializeField] float slideSpeed = 15f;  
+    [SerializeField] float crouchSpeed = 5f;
+    [SerializeField] float slideSpeed = 15f;
     [SerializeField] float jumpForce = 10f;
     [SerializeField] float slamForce = 30f;
-    [SerializeField] float dashForce = 20f;  
-    [SerializeField] float dashCooldown = 1f; 
+    [SerializeField] float dashForce = 20f;
+    [SerializeField] float dashCooldown = 1f;
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
-    [SerializeField] float dashCrouchHeight = 1.2f; 
+    [SerializeField] float dashCrouchHeight = 1.2f;
     [SerializeField] float standingHeight = 2f;
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
-    [SerializeField] private float fastFallMultiplier = 10f; 
+    [SerializeField] private float fastFallMultiplier = 10f;
 
     [SerializeField] private float duration;
     [SerializeField] private float magnitude;
@@ -40,13 +40,13 @@ public class PlayerMovement : MonoBehaviour
     private bool isCrouching;
     private bool isSliding;
     [HideInInspector] public bool isDashing;
-    [HideInInspector] public bool canDash = true; 
+    [HideInInspector] public bool canDash = true;
     [HideInInspector] public bool isSlamming = false;
     private bool isWalking = false;
-    public bool hasAirDashed = false;  
+    public bool hasAirDashed = false;
     private CapsuleCollider capsuleCollider;
     private Camera mainCamera;
-    private CameraShake cameraShake; 
+    private CameraShake cameraShake;
 
     public float attackDistance = 3f;
     public float attackDelay = 0.4f;
@@ -57,12 +57,20 @@ public class PlayerMovement : MonoBehaviour
     bool attacking = false;
     bool readyToAttack = true;
 
+    private GameObject parryKnif;
+    private Animator armsAnimator; // Yeni eklenen deðiþken
+
     void Awake()
     {
-
         inputActions = new PlayerInputActions();
         mainCamera = Camera.main;
-        cameraShake = mainCamera.GetComponent<CameraShake>(); 
+        cameraShake = mainCamera.GetComponent<CameraShake>();
+
+        // Tag kullanarak child objeleri bulma
+        GameObject arms = GameObject.FindGameObjectWithTag("Arms");
+        armsAnimator = arms.GetComponent<Animator>(); // Arms animatorünü al
+        GameObject weapons = GameObject.FindGameObjectWithTag("Weapons");
+        parryKnif = GameObject.FindGameObjectWithTag("ParryKnife");
     }
 
     void OnEnable()
@@ -94,17 +102,17 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
-        rigidBody.freezeRotation = true; 
-        rigidBody.useGravity = true; 
+        rigidBody.freezeRotation = true;
+        rigidBody.useGravity = true;
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     void FixedUpdate()
     {
-        if(iFrames) Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),LayerMask.NameToLayer("HitBox"),true);
-        else 
+        if (iFrames) Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("HitBox"), true);
+        else
         {
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),LayerMask.NameToLayer("HitBox"),false);                  
+            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("HitBox"), false);
         }
         if (!isDashing)
         {
@@ -115,28 +123,28 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        if (isDashing && !isDead && !pauseScript.isPaused) return; 
+        if (isDashing && !isDead && !pauseScript.isPaused) return;
 
         float speed = isSliding ? slideSpeed : (isCrouching ? crouchSpeed : movementSpeed);
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
 
-        if (OnSlope())
+        if (OnSlope() || PlatformTagCheck())
         {
             move = Vector3.ProjectOnPlane(move, GetSlopeNormal());
             if (moveInput == Vector2.zero)
             {
-                rigidBody.drag = slopeDrag; 
+                rigidBody.drag = slopeDrag;
             }
             else
             {
-                rigidBody.drag = 0f; 
+                rigidBody.drag = 0f;
             }
         }
 
         if (isSliding)
         {
             targetVelocity = new Vector3(slideDirection.x * speed, rigidBody.velocity.y, slideDirection.z * speed);
-            rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed); 
+            rigidBody.velocity = Vector3.ClampMagnitude(targetVelocity, speed);
         }
         else
         {
@@ -147,24 +155,23 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnParry(InputAction.CallbackContext context)
     {
-        if(!parryCoolDown)
-        StartCoroutine(parry());
+        if (!parryCoolDown)
+            StartCoroutine(parry());
     }
 
     IEnumerator parry()
     {
         SfxScript.Instance.playAttack();
-        transform.GetChild(0).GetChild(2).GetComponent<Animator>().SetTrigger("Parry");
+        parryKnif.GetComponent<Animator>().SetTrigger("Parry");
         parrySuccessful = true;
         yield return new WaitForSeconds(0.2f);
-        if(parrySuccessful)
+        if (parrySuccessful)
         {
-        parrySuccessful = false;
-        parryCoolDown = true;
-        yield return new WaitForSeconds(1);
-        parryCoolDown = false;
+            parrySuccessful = false;
+            parryCoolDown = true;
+            yield return new WaitForSeconds(1);
+            parryCoolDown = false;
         }
-
     }
 
     void ApplyGravity()
@@ -192,18 +199,18 @@ public class PlayerMovement : MonoBehaviour
         {
             isWalking = true;
             if (isGrounded)
-                transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
+                armsAnimator.SetBool("isWalking", true); // Tag ile bulunan animatörü kullan
             else
-                transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                armsAnimator.SetBool("isWalking", false);
         }
         else if (context.canceled)
         {
-            transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+            armsAnimator.SetBool("isWalking", false);
             isWalking = false;
         }
         else if (isGrounded)
         {
-            transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+            armsAnimator.SetBool("isWalking", false);
             isWalking = false;
         }
         else
@@ -218,9 +225,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGrounded)
             {
-                transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", false);
+                armsAnimator.SetBool("isWalking", false);
                 SfxScript.Instance.playJump();
-                rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); 
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z);
                 rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 isJumping = true;
             }
@@ -229,7 +236,7 @@ public class PlayerMovement : MonoBehaviour
                 if (canDJump)
                 {
                     SfxScript.Instance.playJump();
-                    rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z); 
+                    rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z);
                     rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                     isJumping = true;
                     canDJump = false;
@@ -252,7 +259,7 @@ public class PlayerMovement : MonoBehaviour
             if (isGrounded && moveInput != Vector2.zero)
             {
                 isSliding = true;
-                slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized ; // Use the player's forward direction
+                slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized; // Use the player's forward direction
                 capsuleCollider.height = crouchHeight;
             }
             else if (!isGrounded)
@@ -281,7 +288,7 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed && canDash && !isDashing && !isDead && !pauseScript.isPaused && (isGrounded || !hasAirDashed))
         {
             StartCoroutine(Dash());
-            if (!isGrounded) hasAirDashed = true; 
+            if (!isGrounded) hasAirDashed = true;
         }
     }
 
@@ -295,7 +302,7 @@ public class PlayerMovement : MonoBehaviour
         Invoke(nameof(ResetAttack), attackSpeed);
         Invoke(nameof(AttackRaycast), attackDelay);
 
-        transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("Attack");
+        armsAnimator.SetTrigger("Attack");
 
         SfxScript.Instance.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
         SfxScript.Instance.playAttack();
@@ -338,7 +345,7 @@ public class PlayerMovement : MonoBehaviour
             hit.transform.gameObject.GetComponent<EnemyHealthScript>().takeDamage(attackDamage);
             SfxScript.Instance.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
             SfxScript.Instance.playHit();
-            this.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 0.01f;
+            armsAnimator.speed = 0.01f;
             GameObject clone = Instantiate(bloodEffectPrefab);
             clone.SetActive(true);
             clone.transform.position = hit.transform.gameObject.transform.position;
@@ -349,7 +356,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void recoverTime()
     {
-        this.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().speed = 1;
+        armsAnimator.speed = 1;
         SfxScript.Instance.gameObject.GetComponent<AudioSource>().pitch = 1;
     }
 
@@ -362,25 +369,21 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dashDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
         if (dashDirection == Vector3.zero)
         {
-            dashDirection = transform.forward; 
+            dashDirection = transform.forward;
         }
 
-
         rigidBody.useGravity = false;
-        rigidBody.velocity = Vector3.zero; 
+        rigidBody.velocity = Vector3.zero;
         rigidBody.AddForce(dashDirection.normalized * dashForce, ForceMode.VelocityChange);
         StartCoroutine(IFrames());
-        yield return new WaitForSeconds(0.1f); 
+        yield return new WaitForSeconds(0.1f);
 
         rigidBody.useGravity = true;
 
         isDashing = false;
 
-        yield return new WaitForSeconds(dashCooldown); 
-        canDash = true; 
-
-         
-
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     private bool OnSlope()
@@ -389,9 +392,19 @@ public class PlayerMovement : MonoBehaviour
             return false;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength)
+            )
         {
             return hit.normal != Vector3.up;
+        }
+        return false;
+    }
+    bool PlatformTagCheck()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength))
+        {
+            return hit.collider.CompareTag("Platform");
         }
         return false;
     }
@@ -408,15 +421,15 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Platform"))
         {
             if (isSlamming)
             {
                 SlamImpact();
             }
-            if (isWalking) transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isWalking", true);
+            if (isWalking) armsAnimator.SetBool("isWalking", true);
             isGrounded = true;
-            hasAirDashed = false; 
+            hasAirDashed = false;
             canDJump = true;
             isJumping = false;
             SfxScript.Instance.playFall();
@@ -426,7 +439,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("StackingTrampoline"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Platform") || collision.gameObject.CompareTag("StackingTrampoline"))
         {
             isGrounded = false;
         }
@@ -434,7 +447,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("StackingTrampoline"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Platform") || collision.gameObject.CompareTag("StackingTrampoline"))
         {
             isGrounded = true;
             canDJump = true;

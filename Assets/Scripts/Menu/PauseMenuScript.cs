@@ -83,16 +83,16 @@ public class PauseMenuScript : MonoBehaviour
 
     }
 
-    public void reloadScene()
-    {
-    
-        
-            Time.timeScale = 1;
-            DontDestroyOnLoadManager.Instance.ResetAll();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        
-
-    }
+    ///public void reloadScene()
+    ///{
+    ///
+    ///    
+    ///        Time.timeScale = 1;
+    ///        DontDestroyOnLoadManager.Instance.ResetAll();
+    ///        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    ///    
+    ///
+    ///}
 
 
 

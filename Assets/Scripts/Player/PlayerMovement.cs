@@ -4,8 +4,6 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public static PlayerMovement Instance { get; private set; }
-
     [SerializeField] float movementSpeed = 10f;
     [SerializeField] float crouchSpeed = 5f;  
     [SerializeField] float slideSpeed = 15f;  
@@ -61,16 +59,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional: To keep the singleton across scenes
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
 
         inputActions = new PlayerInputActions();
         mainCamera = Camera.main;
@@ -165,11 +153,11 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator parry()
     {
-        transform.GetChild(0).GetChild(0).GetChild(2).GetComponent<Animator>().SetTrigger("Parry");
+        SfxScript.Instance.playAttack();
+        transform.GetChild(0).GetChild(2).GetComponent<Animator>().SetTrigger("Parry");
         parrySuccessful = true;
-        yield return new WaitForSeconds(0.1f);
-        if(!parrySuccessful);
-        else
+        yield return new WaitForSeconds(0.2f);
+        if(parrySuccessful)
         {
         parrySuccessful = false;
         parryCoolDown = true;

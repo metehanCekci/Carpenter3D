@@ -67,7 +67,7 @@ public class damagePlayerScript : MonoBehaviour
     public void NoParry()
     {
             SfxScript.Instance.playHurt();
-            PHB.playerHp -= damageAmt;
+            PHB.hp -= damageAmt;
             PM.startIFrames();
             waitForParry = false;
     }

@@ -28,7 +28,16 @@ public class FollowScript : MonoBehaviour
             navMeshAgent.SetDestination(transform.position);
             this.gameObject.GetComponent<Animator>().SetBool("isWalking", false);
         }
-    }
+
+        if(navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance) 
+        {
+            navMeshAgent.updateRotation = false;
+            //insert your rotation code herec
+        }
+        else {
+            navMeshAgent.updateRotation = true;
+        }
+            }
 
     void OnCollisionStay(Collision collision)
     {
@@ -42,4 +51,6 @@ public class FollowScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
             isTouching = false;
     }
+
+
 }

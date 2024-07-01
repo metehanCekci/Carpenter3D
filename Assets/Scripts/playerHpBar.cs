@@ -32,7 +32,7 @@ public class PlayerHpBar : MonoBehaviour
         float fillAmount = playerHp / maxHp;
         hpBarImage.fillAmount = fillAmount;
 
-        if(playerHp<0) {
+        if(playerHp<=0) {
             Time.timeScale = 0;
             pm.isDead = true;
             deathMenu.gameObject.SetActive(true);

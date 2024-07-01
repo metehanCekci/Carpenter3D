@@ -43,7 +43,7 @@ public class EnemyAttack : MonoBehaviour
         isAttacking = true;
         yield return new WaitForSeconds(firstAttackTiming);
         slashEffect.SetActive(true);
-        this.gameObject.GetComponent<NavMeshAgent>().speed = 20;
+        this.gameObject.GetComponent<NavMeshAgent>().speed = 40;
         yield return new WaitForSeconds(0.1f);
         slashEffect.transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
@@ -51,7 +51,7 @@ public class EnemyAttack : MonoBehaviour
         slashEffect.SetActive(false);
         yield return new WaitForSeconds(secondAttackTiming);
         slashEffect2.SetActive(true);
-       this.gameObject.GetComponent<NavMeshAgent>().speed = 20;
+       this.gameObject.GetComponent<NavMeshAgent>().speed = 40;
         yield return new WaitForSeconds(0.1f);
         slashEffect2.transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;

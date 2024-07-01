@@ -95436,6 +95436,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8701739362079025926, guid: 11b05ec1ca38635418f65d00e0d022d7, type: 3}
+      propertyPath: m_AutoBraking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8701739362079025926, guid: 11b05ec1ca38635418f65d00e0d022d7, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 9007731150419305592, guid: 11b05ec1ca38635418f65d00e0d022d7, type: 3}
       propertyPath: target
       value: 

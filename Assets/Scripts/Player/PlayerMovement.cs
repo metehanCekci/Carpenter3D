@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
     bool readyToAttack = true;
 
     private GameObject parryKnif;
-    private Animator armsAnimator; // Yeni eklenen deðiþken
+    private Animator armsAnimator; // Yeni eklenen deï¿½iï¿½ken
 
     void Awake()
     {
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Tag kullanarak child objeleri bulma
         GameObject arms = GameObject.FindGameObjectWithTag("Arms");
-        armsAnimator = arms.GetComponent<Animator>(); // Arms animatorünü al
+        armsAnimator = arms.GetComponent<Animator>(); // Arms animatorï¿½nï¿½ al
         GameObject weapons = GameObject.FindGameObjectWithTag("Weapons");
         parryKnif = GameObject.FindGameObjectWithTag("ParryKnife");
     }
@@ -199,7 +199,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isWalking = true;
             if (isGrounded)
-                armsAnimator.SetBool("isWalking", true); // Tag ile bulunan animatörü kullan
+                armsAnimator.SetBool("isWalking", true); // Tag ile bulunan animatï¿½rï¿½ kullan
             else
                 armsAnimator.SetBool("isWalking", false);
         }

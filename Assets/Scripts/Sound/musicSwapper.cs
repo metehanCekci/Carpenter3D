@@ -25,6 +25,8 @@ public class musicSwapper : MonoBehaviour
     void Update()
     {
 
+        try{
+
         if (phaseToCombat)
         {
             if (combat.volume < audioLevel)
@@ -41,6 +43,9 @@ public class musicSwapper : MonoBehaviour
                 combat.volume -= phaseSpeed * Time.deltaTime;
             }
         }
+
+        }
+        catch{}
 
     }
 

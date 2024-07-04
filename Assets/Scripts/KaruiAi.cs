@@ -30,6 +30,7 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator ForeHeadSlam()
     {
+        this.GetComponent<Animator>().setTrigger("ForeHeadSlam");
 
         yield return new waitforseconds(fhsDelay1);
         upSlash1.setActive(true);
@@ -82,6 +83,8 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator JetPackAttack()
     {
+        this.GetComponent<Animator>().setTrigger("JetPackAttack");
+
         yield return new WaitForSeconds(jetpackDelay);
         agent.speed *= 10;
         yield return new waitforseconds(0.5f);
@@ -95,6 +98,8 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator SlashCombo();
     {
+        this.GetComponent<Animator>().setTrigger("SlashCombo");
+
         yield return new WaitForSeconds(slashComboDelay);
         comboSlash1.setActive(true);
         agent.speed *= 3;
@@ -113,6 +118,8 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator SlashCombo2()
     {
+        this.GetComponent<Animator>().setTrigger("SlashCombo2");
+
         yield return new WaitForSeconds(slashCombo2Delay);
         combo2Slash1.setActive(true);
         agent.speed *= 3;
@@ -131,6 +138,7 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator RangedAttack()
     {
+        this.GetComponent<Animator>().setTrigger("RangedAttack");
 
         yield return new waitforseconds(rangedDelay);
         GameObject clone = Instantiate(bazooka1)
@@ -148,15 +156,18 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator JumpAttack()
     {
+        this.GetComponent<Animator>().setTrigger("JumpAttack");
+
         attackEnder();
     }
 
 
     public void randomAttack()
     {
-        agent.speed = baseSpeed;
+
         if(!isBusy)
         {
+        agent.speed = baseSpeed;
         closingDistance = false;
         agent.speed = 0;
 

@@ -27,6 +27,7 @@ public class CameraShake : MonoBehaviour
 
         float elapsed = 0.0f;
 
+
         while (elapsed < duration)
         {
             float x = Random.Range(-1f, 1f) * magnitude;

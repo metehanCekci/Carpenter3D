@@ -3,12 +3,12 @@ using System.Collections;
 
 public class slamAttackScript : MonoBehaviour
 {
+    public float speed;
 
     void FixedUpdate()
     {
-        //transorm.scale++;
+        transform.scale += speed * Time.deltaTime;
     }
 
-    //ontrigger damaj
 
 }

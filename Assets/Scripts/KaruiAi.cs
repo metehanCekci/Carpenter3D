@@ -113,6 +113,19 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator SlashCombo2()
     {
+        yield return new WaitForSeconds(slashCombo2Delay);
+        combo2Slash1.setActive(true);
+        agent.speed *= 3;
+        yield return new waitforseconds(0.1f);
+        combo2Slash1.setActive(false);
+        agent.speed = 0;
+
+        yield return new waitforseconds(slashCombo2Delay2);
+        combo2Slash2.setActive(true);
+        agent.speed *= 3;
+        yield return new waitforseconds(0.1f);
+        combo2Slash2.setActive(false);
+
         attackEnder();
     }
 

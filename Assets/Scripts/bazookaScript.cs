@@ -9,13 +9,13 @@ public class bazookaScript : MonoBehaviour
     public float speed;
     void Start()
     {
-        player = GameObject.findGameObjectById("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         playerPos = player.transform.position;
     }
 
     void FixedUpdate()
     {
-        transform.position = Vector3.MoveTowards(transform.position, playerPos.position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, playerPos, speed * Time.deltaTime);
     }
 
 

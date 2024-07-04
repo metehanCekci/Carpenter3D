@@ -3,12 +3,16 @@ using System.Collections;
 
 public class cutsceneTrigger : MonoBehaviour
 {
-
+    public Animator anim;
+    public AudioSource ass;
     private void OnTriggerEnter(Collider other)
     {
-        if(Collider.gameObject.CompareTag("Player"))
+        if(other.gameObject.CompareTag("Player"))
         {
-            other.GetComponent<animator>().setTrigger("Intro");
+            Debug.Log("intro");
+            anim.SetTrigger("Intro");
+
+            ass.gameObject.SetActive(true);
         }
     }
 

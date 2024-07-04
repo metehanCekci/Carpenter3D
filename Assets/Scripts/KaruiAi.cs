@@ -95,22 +95,47 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator SlashCombo();
     {
+        yield return new WaitForSeconds(slashComboDelay);
+        comboSlash1.setActive(true);
+        agent.speed *= 3;
+        yield return new waitforseconds(0.1f);
+        comboSlash1.setActive(false);
+        agent.speed = 0;
 
+        yield return new waitforseconds(slashComboDelay2);
+        comboSlash2.setActive(true);
+        agent.speed *= 3;
+        yield return new waitforseconds(0.1f);
+        comboSlash2.setActive(false);
+
+        attackEnder();
     }
 
     public IEnumerator SlashCombo2()
     {
-
+        attackEnder();
     }
 
     public IEnumerator RangedAttack()
     {
 
+        yield return new waitforseconds(rangedDelay);
+        GameObject clone = Instantiate(bazooka1)
+        clone.setActive(true);
+        agent.speed *= -10;
+        yield return new waitforseconds(0.05f);
+        agent.speed = baseSpeed;
+        yield return new waitforseconds(rangedDelay2);
+        GameObject clone1 = Instantiate(bazooka2)
+        clone1.setActive(true);
+
+        attackEnder();
+
     }
 
     public IEnumerator JumpAttack()
     {
-
+        attackEnder();
     }
 
 
@@ -148,9 +173,14 @@ public class KaruiAi : MonoBehaviour
     public void randomRanged()
     {
 
-        int randomNumber = Random.Range(1,4);
+        int randomNumber = Random.Range(1,3);
 
         if(randomNumber == 1)
+        startCoroutine(RangedAttack());
+
+        else if(randomNumber == 2)
+        startCoroutine(JumpAttack());
+
 
     }
 

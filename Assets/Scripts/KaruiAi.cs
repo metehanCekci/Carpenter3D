@@ -12,6 +12,7 @@ public class KaruiAi : MonoBehaviour
     public float fhsDelay1;
     public float fhsDelay2;
     public float fhsDelay3;
+    
     public float jetpackDelay;
     public float slashComboDelay;
     public float slashComboDelay2;
@@ -19,6 +20,8 @@ public class KaruiAi : MonoBehaviour
     public float slashCombo2Delay2;
     public float rangedDelay;
     public float rangedDelay2;
+    public float JumpAttackDelay1;
+    public float JumpAttackDelay2;
 
     public GameObject comboSlash1;
     public GameObject comboSlash2;
@@ -26,12 +29,13 @@ public class KaruiAi : MonoBehaviour
     public GameObject combo2Slash2;
     public GameObject bazooka1;
     public GameObject bazooka2;
+    public GameObject jumpAttack;
 
     public GameObject Player;
     private NavMeshAgent agent;
     private float baseSpeed;
 
-    private bool isBusy = false;
+    public bool isBusy = false;
     private bool closingDistance = false;
     private bool isWaiting = false;
 
@@ -49,47 +53,45 @@ public class KaruiAi : MonoBehaviour
     public IEnumerator ForeHeadSlam()
     {
         this.GetComponent<Animator>().SetTrigger("ForeHeadSlam");
+        agent.speed = 0;
 
         yield return new WaitForSeconds(fhsDelay1);
         upSlash1.SetActive(true);
-        agent.speed = baseSpeed * 3;
+        agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
         upSlash1.SetActive(false);
 
         yield return new WaitForSeconds(fhsDelay2);
         upSlash2.SetActive(true);
-        agent.speed = baseSpeed * 3;
+        agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
         upSlash2.SetActive(false);
 
         yield return new WaitForSeconds(fhsDelay3);
         upSlash1.SetActive(true);
-        agent.speed = baseSpeed * 3;
+        agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
         upSlash1.SetActive(false);
 
         yield return new WaitForSeconds(fhsDelay2);
         upSlash2.SetActive(true);
-        agent.speed = baseSpeed * 3;
+        agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
         upSlash2.SetActive(false);
 
-        yield return new WaitForSeconds(fhsDelay1);
+        yield return new WaitForSeconds(fhsDelay2);
         upSlash1.SetActive(true);
-        agent.speed = baseSpeed * 3;
+        agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
         upSlash1.SetActive(false);
 
-        yield return new WaitForSeconds(fhsDelay3);
-        GameObject clone = Instantiate(groundCircle);
-        clone.SetActive(true);
 
-        attackEnder();
+        Invoke("attackEnder", 2);
     }
 
     public IEnumerator JetPackAttack()
@@ -104,7 +106,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         jetpackSlash.SetActive(false);
 
-        attackEnder();
+        Invoke("attackEnder", 1);
     }
 
     public IEnumerator SlashCombo()
@@ -124,7 +126,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         comboSlash2.SetActive(false);
 
-        attackEnder();
+        Invoke("attackEnder", 1);
     }
 
     public IEnumerator SlashCombo2()
@@ -144,7 +146,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         combo2Slash2.SetActive(false);
 
-        attackEnder();
+        Invoke("attackEnder", 1);
     }
 
     public IEnumerator RangedAttack()
@@ -161,16 +163,26 @@ public class KaruiAi : MonoBehaviour
         GameObject clone1 = Instantiate(bazooka2);
         clone1.SetActive(true);
 
-        attackEnder();
+        Invoke("attackEnder", 1);
     }
 
     public IEnumerator JumpAttack()
     {
         this.GetComponent<Animator>().SetTrigger("JumpAttack");
 
-        attackEnder();
+        yield return new WaitForSeconds(JumpAttackDelay1);
+        jumpAttack.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        jumpAttack.SetActive(false);
 
-        yield return new WaitForSeconds(0);
+        yield return new WaitForSeconds(JumpAttackDelay2);
+        jumpAttack.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        jumpAttack.SetActive(false);
+        
+        Invoke("attackEnder", 2);
+
+
     }
 
     public void randomAttack()
@@ -178,21 +190,22 @@ public class KaruiAi : MonoBehaviour
         if (!isBusy)
         {
             agent.speed = baseSpeed;
+            this.GetComponent<Animator>().speed = 1;
             closingDistance = false;
             agent.speed = 0;
 
-            int attackNumber = Random.Range(1, 100);
+            int attackNumber = Random.Range(1, 40);
 
             if (attackNumber < 30)
                 StartCoroutine(ForeHeadSlam());
             else if (attackNumber < 40)
-                StartCoroutine(JetPackAttack());
+                StartCoroutine(JumpAttack());
             else if (attackNumber < 65)
                 StartCoroutine(SlashCombo());
             else if (attackNumber < 90)
                 StartCoroutine(SlashCombo2());
             else if (attackNumber < 100)
-                StartCoroutine(JumpAttack());
+                StartCoroutine(JetPackAttack());
 
             isBusy = true;
         }
@@ -212,11 +225,11 @@ public class KaruiAi : MonoBehaviour
     {
         if (!isBusy && !closingDistance && !isWaiting)
         {
-            int longDis = Random.Range(1, 5);
+            int longDis = Random.Range(1, 2);
 
-            if (longDis == 1)
+            if (longDis == 1 || longDis == 2)
                 closeDistance();
-            else if (longDis == 2)
+            else if (longDis == 3)
                 randomRanged();
             else
                 isWaiting = true;
@@ -228,7 +241,9 @@ public class KaruiAi : MonoBehaviour
     public void closeDistance()
     {
         closingDistance = true;
-        agent.speed *= 3;
+        agent.speed *= 2;
+        this.GetComponent<Animator>().speed = 2;
+        
     }
 
     public void attackEnder()
@@ -236,6 +251,8 @@ public class KaruiAi : MonoBehaviour
         isBusy = false;
         agent.speed = baseSpeed;
     }
+
+    
 
     public void notWaiting()
     {

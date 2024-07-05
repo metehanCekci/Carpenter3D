@@ -39,7 +39,7 @@ public class damagePlayerScript : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other) {
+    private void OnTriggerEnter(Collider other) {
         if(other.gameObject.CompareTag("Player"))
         {
             if(!PM.parrySuccessful)

@@ -6,6 +6,9 @@ public class IntroEnder : MonoBehaviour
 {
     public GameObject mus;
     public FollowScript fs;
+    public GameObject close;
+    public GameObject afar;
+    public EnemyHealthScript ehs;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +23,11 @@ public class IntroEnder : MonoBehaviour
         {
             mus.SetActive(true);
             fs.isFollowing = true;
+            fs.gameObject.GetComponent<KaruiAi>().enabled = true;
+            close.SetActive(true);
+            afar.SetActive(true);
+            ehs.enabled = true;
+            Destroy(this);
         }
 
         

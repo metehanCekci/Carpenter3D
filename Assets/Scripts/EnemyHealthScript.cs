@@ -24,6 +24,7 @@ public class EnemyHealthScript : MonoBehaviour
     {
         if (!isTesting)
         {
+            if(this.enabled)
             hp -= damageAmt;
             if (hp < 0) death();
         }

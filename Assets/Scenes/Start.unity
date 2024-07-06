@@ -84137,6 +84137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Audio
       objectReference: {fileID: 0}
+    - target: {fileID: 8224793879405751061, guid: a603cfe8a1a888f45b1b6ddd019f8104, type: 3}
+      propertyPath: m_TagString
+      value: AudioDontDestroy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

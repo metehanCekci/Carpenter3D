@@ -29,38 +29,38 @@ public class PauseMenuScript : MonoBehaviour
         isPaused = false;
     }
 
-     public void ResumePauseGame(InputAction.CallbackContext context)
+    public void ResumePauseGame(InputAction.CallbackContext context)
     {
-            if (!isPaused && !pm.isDead)
-            {
-                
-                // Cursor.lockState = CursorLockMode.None;
-                pauseMenuUI.gameObject.SetActive(true);
-                settingsMenuUI.gameObject.SetActive(false);
-                pauseBack.gameObject.SetActive(true);
-                playerUI.gameObject.SetActive(false);
-                cam.GetComponent<CameraController>().enabled = false;
-                pm.enabled = false;
-                Cursor.lockState = CursorLockMode.Confined;
-                Time.timeScale = 0;
-                isPaused = true;
-            }
-            else if(isPaused)
-            {
-                pauseBack.gameObject.SetActive(false);
-                pauseMenuUI.gameObject.SetActive(false);
-                settingsMenuUI.gameObject.SetActive(false);
-                playerUI.gameObject.SetActive(true);
-                cam.GetComponent<CameraController>().enabled = true;
-                pm.enabled = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Time.timeScale = 1;
-                isPaused = false;
-            }
-            else return;
-        
+        if (!isPaused && !pm.isDead)
+        {
 
-        
+            // Cursor.lockState = CursorLockMode.None;
+            pauseMenuUI.gameObject.SetActive(true);
+            settingsMenuUI.gameObject.SetActive(false);
+            pauseBack.gameObject.SetActive(true);
+            playerUI.gameObject.SetActive(false);
+            cam.GetComponent<CameraController>().enabled = false;
+            pm.enabled = false;
+            Cursor.lockState = CursorLockMode.Confined;
+            Time.timeScale = 0;
+            isPaused = true;
+        }
+        else if (isPaused)
+        {
+            pauseBack.gameObject.SetActive(false);
+            pauseMenuUI.gameObject.SetActive(false);
+            settingsMenuUI.gameObject.SetActive(false);
+            playerUI.gameObject.SetActive(true);
+            cam.GetComponent<CameraController>().enabled = true;
+            pm.enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1;
+            isPaused = false;
+        }
+        else return;
+
+
+
 
 
     }
@@ -81,25 +81,28 @@ public class PauseMenuScript : MonoBehaviour
 
     public void quitHomeButton()
     {
-            Camera.main.enabled = false; //Oyuncunun kamerasını kapatıp menü kamerasını kullanmaya başlıyor
-            player.SetActive(false);
-            Time.timeScale = 1;
-            SceneManager.LoadScene(0);
+        
+        Time.timeScale = 1;
+        Destroy(GameObject.FindGameObjectWithTag("AudioDontDestroy"));
+        SceneManager.LoadScene(0);
     }
 
     public void reloadScene()
     {
-           Time.timeScale = 1;
-           DontDestroyOnLoadManager.Instance.ResetAll();
-           SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        pm.isDead = false;
+        Time.timeScale = 1;
+        cam.GetComponent<CameraController>().enabled = true;
+        Destroy(GameObject.FindGameObjectWithTag("AudioDontDestroy"));
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
     }
     public void quitGame()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#endif
         Application.Quit();
-        
+
     }
 
 

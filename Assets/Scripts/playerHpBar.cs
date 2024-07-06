@@ -16,12 +16,15 @@ public class PlayerHpBar : MonoBehaviour
     private float lerpSpeed = 0.1f;
     [SerializeField] PlayerMovement pm;
     [SerializeField] Canvas deathMenu;
+    Camera cam;
 
     // Awake is called when the script instance is being loaded
     void Awake()
     {
-
+        cam = Camera.main;
     }
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -34,16 +37,20 @@ public class PlayerHpBar : MonoBehaviour
     {
         // Can barının doluluk oranını hesapla ve ayarla
         healthSlider.value = hp;
+        /*Debug.Log($"Is dead: {pm.isDead}");
+        Debug.Log($"Time scale: {Time.timeScale}");*/
 
-        if(hp<=0) {
+        if (hp <= 0)
+        {
             Time.timeScale = 0;
             pm.isDead = true;
             deathMenu.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            }
+            cam.GetComponent<CameraController>().enabled = false;
+        }
 
-        if(healthSlider.value != easeSlider.value)
+        if (healthSlider.value != easeSlider.value)
         {
             easeSlider.value = Mathf.Lerp(easeSlider.value, hp, lerpSpeed);
         }

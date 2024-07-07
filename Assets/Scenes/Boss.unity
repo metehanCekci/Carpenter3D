@@ -1501,11 +1501,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5999969903932541987, guid: 6d251644d4352c2419e4e73a2a9da5a4, type: 3}
       propertyPath: m_Size.y
-      value: 3
+      value: 1.9550076
       objectReference: {fileID: 0}
     - target: {fileID: 5999969903932541987, guid: 6d251644d4352c2419e4e73a2a9da5a4, type: 3}
       propertyPath: m_Center.y
-      value: -0.76781434
+      value: -1.2903109
       objectReference: {fileID: 0}
     - target: {fileID: 6981368966857028954, guid: 6d251644d4352c2419e4e73a2a9da5a4, type: 3}
       propertyPath: m_Enabled

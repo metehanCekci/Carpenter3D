@@ -164,12 +164,13 @@ public class PlayerMovement : MonoBehaviour
         SfxScript.Instance.playAttack();
         parryKnif.GetComponent<Animator>().SetTrigger("Parry");
         parrySuccessful = true;
+        parryCoolDown = true;
         yield return new WaitForSeconds(0.2f);
         if (parrySuccessful)
         {
             parrySuccessful = false;
-            parryCoolDown = true;
-            yield return new WaitForSeconds(1);
+
+            yield return new WaitForSeconds(0.4f);
             parryCoolDown = false;
         }
     }

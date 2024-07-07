@@ -173,6 +173,9 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitForSeconds(0.4f);
             parryCoolDown = false;
         }
+        else
+            parryCoolDown = false;        
+        
     }
 
     void ApplyGravity()

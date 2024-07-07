@@ -16,6 +16,7 @@ public class SfxScript : MonoBehaviour
     [SerializeField] AudioClip Footstep;
     [SerializeField] AudioClip Hurt;
     [SerializeField] AudioClip Parry;
+    [SerializeField] AudioClip Swing;
     // Start is called before the first frame update
     void Start()
     {
@@ -82,7 +83,16 @@ public class SfxScript : MonoBehaviour
     }
     public void playParry()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Parry);        
+        this.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Parry);
+        Invoke("resetPitch",0.5f);     
+    }
+
+    public void playSwing()
+    {
+        this.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Swing);
+        Invoke("resetPitch",0.5f);
     }
 
     public void resetPitch()

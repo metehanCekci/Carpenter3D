@@ -67,7 +67,7 @@ public class KaruiAi : MonoBehaviour
         }
         else if(jumpAttackDown)
         {
-            float step = baseSpeed * Time.deltaTime * 15; // Calculate distance to move
+            float step = baseSpeed * Time.deltaTime * 25; // Calculate distance to move
             transform.position = Vector3.MoveTowards(transform.position, jumpAttackTrans2, step);
 
             if(Vector3.Distance(transform.position, jumpAttackTrans2) < 0.1f)
@@ -92,6 +92,8 @@ public class KaruiAi : MonoBehaviour
         clone.transform.position = upSlash1.transform.position;
         clone.transform.rotation = upSlash1.transform.rotation;
 
+        SfxScript.Instance.playSwing();
+
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
@@ -105,6 +107,8 @@ public class KaruiAi : MonoBehaviour
         clone1.transform.SetParent(upSlash2.transform.parent);
         clone1.transform.position = upSlash2.transform.position;
         clone1.transform.rotation = upSlash2.transform.rotation;
+
+        SfxScript.Instance.playSwing();
 
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
@@ -120,6 +124,8 @@ public class KaruiAi : MonoBehaviour
         clone2.transform.position = upSlash1.transform.position;
         clone2.transform.rotation = upSlash1.transform.rotation;
 
+        SfxScript.Instance.playSwing();
+
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
@@ -134,6 +140,8 @@ public class KaruiAi : MonoBehaviour
         clone3.transform.position = upSlash2.transform.position;
         clone3.transform.rotation = upSlash2.transform.rotation;
 
+        SfxScript.Instance.playSwing();
+
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
@@ -147,6 +155,8 @@ public class KaruiAi : MonoBehaviour
         clone4.transform.SetParent(upSlash1.transform.parent);
         clone4.transform.position = upSlash1.transform.position;
         clone4.transform.rotation = upSlash1.transform.rotation;
+
+        SfxScript.Instance.playSwing();
 
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
@@ -251,6 +261,7 @@ public class KaruiAi : MonoBehaviour
         clone.transform.position = jumpAttack.transform.position;
         clone.transform.rotation = jumpAttack.transform.rotation;
         clone.transform.SetParent(jumpAttack.transform.parent);
+        SfxScript.Instance.playSwing();
         yield return new WaitForSeconds(0.1f);
         clone.GetComponent<BoxCollider>().enabled = false;
 
@@ -260,6 +271,7 @@ public class KaruiAi : MonoBehaviour
         clone1.transform.position = jumpAttack.transform.position;
         clone1.transform.rotation = jumpAttack.transform.rotation;
         clone1.transform.SetParent(jumpAttack.transform.parent);
+        SfxScript.Instance.playSwing();
         yield return new WaitForSeconds(0.1f);
         clone1.GetComponent<BoxCollider>().enabled = false;
 

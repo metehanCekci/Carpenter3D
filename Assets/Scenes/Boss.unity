@@ -7190,6 +7190,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6466295267463318925, guid: a603cfe8a1a888f45b1b6ddd019f8104, type: 3}
+      propertyPath: Swing
+      value: 
+      objectReference: {fileID: 8300000, guid: 54abc4bf763c4044ba8840b59df472d8, type: 3}
     - target: {fileID: 6691073608990084086, guid: a603cfe8a1a888f45b1b6ddd019f8104, type: 3}
       propertyPath: m_LocalPosition.x
       value: 622.7398
@@ -11519,7 +11523,7 @@ GameObject:
   - component: {fileID: 1515379910}
   - component: {fileID: 1515379913}
   - component: {fileID: 1515379912}
-  - component: {fileID: 1515379911}
+  - component: {fileID: 1515379914}
   m_Layer: 3
   m_Name: Floor
   m_TagString: Ground
@@ -11542,28 +11546,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 391659870}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!64 &1515379911
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1515379909}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1515379912
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11614,6 +11596,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515379909}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &1515379914
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515379909}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000001, z: 6.374607}
+  m_Center: {x: 0, y: 2.764954e-16, z: 3.2287505}
 --- !u!43 &1529725420
 Mesh:
   m_ObjectHideFlags: 0

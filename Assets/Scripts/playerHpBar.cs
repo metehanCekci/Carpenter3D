@@ -10,7 +10,7 @@ public class PlayerHpBar : MonoBehaviour
     public Slider healthSlider;
 
     public Slider easeSlider;
-    public float maxHp = 100f; // Maksimum can puanı
+    public float maxHp; // Maksimum can puanı
     public float hp; // Maksimum can puanı
 
     private float lerpSpeed = 0.1f;

@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
     [SerializeField] float dashCrouchHeight = 1.2f;
-    [SerializeField] float standingHeight = 2f;
+    [SerializeField] float standingHeight = 2.5f;
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
     [SerializeField] private float fastFallMultiplier = 10f;

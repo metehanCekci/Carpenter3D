@@ -8,6 +8,7 @@ public class IntroEnder : MonoBehaviour
     public FollowScript fs;
     public GameObject close;
     public GameObject afar;
+    public GameObject bossbar;
     public EnemyHealthScript ehs;
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,7 @@ public class IntroEnder : MonoBehaviour
             close.SetActive(true);
             afar.SetActive(true);
             ehs.enabled = true;
+            bossbar.SetActive(true);
             Destroy(this);
         }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AfarTrigger : MonoBehaviour
 {
+    public CloseAttackTrigger cat;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,10 @@ public class AfarTrigger : MonoBehaviour
     }
 
         private void OnTriggerStay(Collider other) {
+
+        if(!cat.isClose)
+        
+
         if(other.CompareTag("Player") && !this.transform.parent.GetComponent<KaruiAi>().isBusy)
         
         this.transform.parent.GetComponent<KaruiAi>().longDistance();

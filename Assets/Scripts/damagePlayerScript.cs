@@ -12,9 +12,9 @@ public class damagePlayerScript : MonoBehaviour
     private float timer;
     [HideInInspector] public bool waitForParry = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+                SfxScript.Instance.playSwing();
     }
 
     // Update is called once per frame

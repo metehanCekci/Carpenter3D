@@ -8,6 +8,7 @@ public class FollowScript : MonoBehaviour
     public bool isFollowing = false;
     public Transform target;
     private bool isTouching = false;
+    public bool isRotating = true;
     private NavMeshAgent navMeshAgent;
 
     // Values that will be set in the Inspector
@@ -40,8 +41,8 @@ public class FollowScript : MonoBehaviour
             return;
         }
 
-        if (navMeshAgent.speed != 0)
-        {
+            if(isRotating)
+            {
             // Find the vector pointing from our position to the target
             direction = (target.position - transform.position).normalized;
 
@@ -50,7 +51,8 @@ public class FollowScript : MonoBehaviour
 
             // Rotate us over time according to speed until we are in the required rotation
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * RotationSpeed);
-        }
+            }
+        
 
         if (isFollowing && !isTouching)
         {

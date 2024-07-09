@@ -3,13 +3,15 @@ using UnityEngine;
 public class MoveToPlayer : MonoBehaviour
 {
     public float moveSpeed = 100f;  // Hareket hızı
-    private Vector3 direction;  // Hareket yönü
-    private bool isMovingToPlayer = true;  // İlk hareketin player'a doğru olduğunu belirten bayrak
+    public Vector3 direction;  // Hareket yönü
+    public bool isMovingToPlayer = true;  // İlk hareketin player'a doğru olduğunu belirten bayrak
+    public GameObject player;
 
     void Awake()
     {
         // Player objesini etiket ile bulma
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+
         if (player != null)
         {
             // Player konumuna doğru olan yönü hesaplama (sadece yatay düzlemde)
@@ -17,10 +19,7 @@ public class MoveToPlayer : MonoBehaviour
             Vector3 currentPosition = transform.position;
             direction = (new Vector3(playerPosition.x, currentPosition.y, playerPosition.z) - currentPosition).normalized;
         }
-        else
-        {
-            Debug.LogError("Player objesi bulunamadı! Lütfen 'Player' tag'li bir obje olduğundan emin olun.");
-        }
+
     }
 
     void Update()

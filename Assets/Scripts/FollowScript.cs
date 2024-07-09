@@ -57,12 +57,10 @@ public class FollowScript : MonoBehaviour
         if (isFollowing && !isTouching)
         {
             navMeshAgent.SetDestination(target.position);
-            this.gameObject.GetComponent<Animator>().SetBool("isWalking", true);
         }
         else if (isTouching)
         {
             navMeshAgent.SetDestination(transform.position);
-            this.gameObject.GetComponent<Animator>().SetBool("isWalking", false);
         }
 
         if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)

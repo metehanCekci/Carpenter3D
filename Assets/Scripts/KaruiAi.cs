@@ -20,7 +20,6 @@ public class KaruiAi : MonoBehaviour
     public float slashCombo2Delay;
     public float slashCombo2Delay2;
     public float rangedDelay;
-    public float rangedDelay2;
     public float JumpAttackDelay1;
     public float JumpAttackDelay2;
 
@@ -162,7 +161,7 @@ public class KaruiAi : MonoBehaviour
         clone4.GetComponent<BoxCollider>().enabled = false;
         Destroy(clone4, 1);
 
-        Invoke("attackEnder", 2);
+        Invoke("attackEnder", 2-0.1f);
     }
 
     public IEnumerator JetPackAttack()
@@ -171,7 +170,7 @@ public class KaruiAi : MonoBehaviour
         this.GetComponent<Animator>().SetTrigger("JetPackAttack");
 
         yield return new WaitForSeconds(1.3f);
-        agent.speed = baseSpeed * 5;
+        agent.speed = baseSpeed * 8;
         yield return new WaitForSeconds(jetpackDelay);
         agent.speed = 0;
         GameObject clone = Instantiate(jetpackSlash);
@@ -185,7 +184,7 @@ public class KaruiAi : MonoBehaviour
         clone.GetComponent<BoxCollider>().enabled = false;
 
 
-        Invoke("attackEnder", 2);
+        Invoke("attackEnder", 3f);
     }
 
     public IEnumerator SlashCombo()
@@ -200,10 +199,10 @@ public class KaruiAi : MonoBehaviour
         clone.transform.position = comboSlash1.transform.position;
         clone.transform.rotation = comboSlash1.transform.rotation;
 
-        agent.speed *= baseSpeed * 5;
+        agent.speed = baseSpeed * 10;
         yield return new WaitForSeconds(0.1f);
         clone.GetComponent<BoxCollider>().enabled = false;
-        agent.speed = 0.5f;
+        agent.speed = 0;
         yield return new WaitForSeconds(0.1f);
 
         GameObject clone00 = Instantiate(comboSlash3);
@@ -225,10 +224,10 @@ public class KaruiAi : MonoBehaviour
         clone2.transform.position = comboSlash2.transform.position;
         clone2.transform.rotation = comboSlash2.transform.rotation;
 
-        agent.speed *= baseSpeed * 5;
+        agent.speed = baseSpeed * 10;
         yield return new WaitForSeconds(0.1f);
         clone2.GetComponent<BoxCollider>().enabled = false;
-        agent.speed = 0.5f;
+        agent.speed = 0;
         yield return new WaitForSeconds(0.1f);
 
         GameObject clone01 = Instantiate(comboSlash1);
@@ -249,10 +248,10 @@ public class KaruiAi : MonoBehaviour
         clone3.transform.position = comboSlash3.transform.position;
         clone3.transform.rotation = comboSlash3.transform.rotation;
 
-        agent.speed *= baseSpeed * 5;
+        agent.speed = baseSpeed * 10;
         yield return new WaitForSeconds(0.1f);
         clone3.GetComponent<BoxCollider>().enabled = false;
-        agent.speed = 0.5f;
+        agent.speed = 0;
         yield return new WaitForSeconds(0.1f);
 
         GameObject clone02 = Instantiate(comboSlash1);
@@ -265,7 +264,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         clone02.GetComponent<BoxCollider>().enabled = false;
 
-        Invoke("attackEnder", 2 - 0.1f);
+        Invoke("attackEnder", 2);
     }
 
     public IEnumerator SlashCombo2()
@@ -292,7 +291,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         combo2Slash2.SetActive(false);
 
-        Invoke("attackEnder", 2);
+        Invoke("attackEnder", 2 -0.1f);
     }
 
     public IEnumerator RangedAttack()
@@ -303,17 +302,19 @@ public class KaruiAi : MonoBehaviour
         agent.speed = 0;
         yield return new WaitForSeconds(rangedDelay);
         GameObject clone = Instantiate(RangedSlash);
-        clone.SetActive(true);
 
         clone.transform.position = RangedSlash.transform.position;
         clone.transform.rotation = RangedSlash.transform.rotation;
+        clone.SetActive(true);
 
-        agent.speed *= -10;
+
+
+        agent.speed = baseSpeed * -10;
         yield return new WaitForSeconds(0.1f);
-        agent.speed = baseSpeed;
+        agent.speed = 0;
 
 
-        Invoke("attackEnder", 2 - 0.1f);
+        Invoke("attackEnder", 2 );
     }
 
     public IEnumerator JumpAttack()
@@ -362,20 +363,21 @@ public class KaruiAi : MonoBehaviour
     {
         if (!isBusy)
         {
+            this.GetComponent<Animator>().SetBool("isWalking" , false);
             agent.speed = baseSpeed;
             this.GetComponent<Animator>().speed = 1;
             closingDistance = false;
             agent.speed = 0;
 
-            int attackNumber = Random.Range(1, 90);
+            int attackNumber = Random.Range(1, 80);
 
-            if (attackNumber < 30)
+            if (attackNumber < 25)
                 StartCoroutine(ForeHeadSlam());
-            else if (attackNumber < 40)
+            else if (attackNumber < 35)
                 StartCoroutine(JumpAttack());
-            else if (attackNumber < 65)
+            else if (attackNumber < 60)
                 StartCoroutine(SlashCombo());
-            else if (attackNumber < 90)
+            else if (attackNumber < 80)
                 StartCoroutine(JetPackAttack());
             else if (attackNumber < 100)
                 StartCoroutine(SlashCombo2());
@@ -386,12 +388,13 @@ public class KaruiAi : MonoBehaviour
 
     public void randomRanged()
     {
+        this.GetComponent<Animator>().SetBool("isWalking" , false);
         this.GetComponent<Animator>().speed = 1;
-        int randomNumber = Random.Range(1, 3);
+        int randomNumber = Random.Range(1, 4);
 
-        if (randomNumber == 1)
+        if (randomNumber == 1 || randomNumber ==2)
             StartCoroutine(RangedAttack());
-        else if (randomNumber == 2)
+        else if (randomNumber == 3)
             StartCoroutine(JetPackAttack());
 
         isBusy = true;
@@ -401,11 +404,11 @@ public class KaruiAi : MonoBehaviour
     {
         if (!isBusy && !closingDistance && !isWaiting)
         {
-            int longDis = Random.Range(1, 4);
+            int longDis = Random.Range(1, 5);
 
             if (longDis == 1 || longDis == 2)
                 closeDistance();
-            else if (longDis == 3)
+            else if (longDis == 3 || longDis==4)
                 randomRanged();
             else
                 isWaiting = true;
@@ -417,9 +420,9 @@ public class KaruiAi : MonoBehaviour
     public void closeDistance()
     {
         closingDistance = true;
-        agent.speed *= 3;
+        agent.speed = baseSpeed * 3;
         this.GetComponent<Animator>().speed = 2;
-        
+  
     }
 
     public void attackEnder()
@@ -427,10 +430,13 @@ public class KaruiAi : MonoBehaviour
         isBusy = false;
         agent.speed = baseSpeed;
         this.GetComponent<FollowScript>().isFollowing = true;
+                this.GetComponent<Animator>().SetBool("isWalking" , true);      
+        
     }
 
     public void notWaiting()
     {
         isWaiting = false;
+
     }
 }

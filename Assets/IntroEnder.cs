@@ -40,6 +40,7 @@ public class IntroEnder : MonoBehaviour
             SpotLight.SetActive(false);
             AreaLight.SetActive(true);
             fs.isRotating = true;
+            fs.gameObject.GetComponent<Animator>().SetBool("isWalking" , true);
             Destroy(this);
         }
 

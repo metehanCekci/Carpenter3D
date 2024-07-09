@@ -38200,6 +38200,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!20 &591234594 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1897882623602166819, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
+  m_PrefabInstance: {fileID: 8481734753604925733}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &602048576
 GameObject:
   m_ObjectHideFlags: 0
@@ -79068,6 +79073,7 @@ GameObject:
   - component: {fileID: 1888960852}
   - component: {fileID: 1888960851}
   - component: {fileID: 1888960850}
+  - component: {fileID: 1888960853}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -79274,6 +79280,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1888960853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888960849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1889719164 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c25b68649f4c9604585f8b8e54ade562, type: 3}
@@ -84444,6 +84473,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1897882623602166819, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
+      propertyPath: m_HDR
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897882623602166819, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
+      propertyPath: m_AllowMSAA
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2791279914868130446, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2791279914868130446, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
+      propertyPath: m_Cameras.Array.data[0]
+      value: 
+      objectReference: {fileID: 591234594}
     - target: {fileID: 5028374461927508565, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: pauseScript
       value: 
@@ -84455,6 +84500,10 @@ PrefabInstance:
     - target: {fileID: 5851050296271392933, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: m_TargetTexture
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678819580618548670, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
+      propertyPath: m_CameraType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

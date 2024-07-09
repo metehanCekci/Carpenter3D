@@ -9,11 +9,19 @@ public class IntroEnder : MonoBehaviour
     public GameObject close;
     public GameObject afar;
     public GameObject bossbar;
+    public GameObject SpotLight;
+    public GameObject AreaLight;
     public EnemyHealthScript ehs;
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    void Awake()
+    {
+        SpotLight.SetActive(true);
+        fs.isRotating = false;
     }
 
     // Update is called once per frame
@@ -29,6 +37,9 @@ public class IntroEnder : MonoBehaviour
             afar.SetActive(true);
             ehs.enabled = true;
             bossbar.SetActive(true);
+            SpotLight.SetActive(false);
+            AreaLight.SetActive(true);
+            fs.isRotating = true;
             Destroy(this);
         }
 

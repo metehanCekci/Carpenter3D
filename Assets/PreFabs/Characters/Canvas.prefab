@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6881172534346391516}
+  - component: {fileID: 630758975544976533}
   m_Layer: 5
   m_Name: AllBar
   m_TagString: Untagged
@@ -37,6 +38,24 @@ RectTransform:
   m_AnchoredPosition: {x: 618.5, y: 274}
   m_SizeDelta: {x: 1237, y: 548}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &630758975544976533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175214257805731682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b162e7cb4040e61498f5441e995decce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 8633180557769686076}
+  easeSlider: {fileID: 890806323579574305}
+  maxHp: 100
+  hp: 100
+  pm: {fileID: 0}
+  deathMenu: {fileID: 0}
 --- !u!1 &1559348353236463556
 GameObject:
   m_ObjectHideFlags: 0
@@ -47,7 +66,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8537594510021842719}
   - component: {fileID: 890806323579574305}
-  - component: {fileID: 2015038285349385066}
   m_Layer: 5
   m_Name: EaseBar
   m_TagString: Untagged
@@ -127,24 +145,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2015038285349385066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559348353236463556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b162e7cb4040e61498f5441e995decce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthSlider: {fileID: 0}
-  easeSlider: {fileID: 0}
-  maxHp: 100
-  hp: 0
-  pm: {fileID: 0}
-  deathMenu: {fileID: 0}
 --- !u!1 &2090870778434871476
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +305,6 @@ GameObject:
   m_Component:
   - component: {fileID: 234600955479121830}
   - component: {fileID: 8633180557769686076}
-  - component: {fileID: 272123544876187494}
   m_Layer: 5
   m_Name: HpBarParent
   m_TagString: Untagged
@@ -384,24 +383,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &272123544876187494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6422146580090957607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b162e7cb4040e61498f5441e995decce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthSlider: {fileID: 0}
-  easeSlider: {fileID: 0}
-  maxHp: 100
-  hp: 0
-  pm: {fileID: 0}
-  deathMenu: {fileID: 0}
 --- !u!1 &8088307554421897555
 GameObject:
   m_ObjectHideFlags: 0

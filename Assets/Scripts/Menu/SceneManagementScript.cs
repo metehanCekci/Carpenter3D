@@ -22,5 +22,17 @@ public class SceneManagementScript : MonoBehaviour
             currentScene++;
             SceneManager.LoadScene(currentScene);
         }
+
+        
     }
+
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            loadScene();
+        }
+    }
+
 }

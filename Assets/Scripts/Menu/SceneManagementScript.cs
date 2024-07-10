@@ -27,12 +27,4 @@ public class SceneManagementScript : MonoBehaviour
     }
 
     
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Player"))
-        {
-            loadScene();
-        }
-    }
-
 }

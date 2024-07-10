@@ -9628,6 +9628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b162e7cb4040e61498f5441e995decce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notPlayer: 1
   healthSlider: {fileID: 966572472}
   easeSlider: {fileID: 1692348915}
   maxHp: 1000
@@ -13713,6 +13714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b162e7cb4040e61498f5441e995decce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notPlayer: 0
   healthSlider: {fileID: 1943759680}
   easeSlider: {fileID: 1199579411}
   maxHp: 100

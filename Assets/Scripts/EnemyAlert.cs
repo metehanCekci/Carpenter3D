@@ -11,23 +11,26 @@ public class EnemyAlert : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            
-            
+            if (this.enabled)
+            {
+
+
                 foreach (DoorScript obj in doorScripts)
                 {
                     obj.doorLocked = true;
                 }
-            
 
-            
 
-            foreach (GameObject obj in gameObjectsToFollow)
-            {
-                FollowScript followScript = obj.GetComponent<FollowScript>();
-                if (followScript != null)
+
+
+                foreach (GameObject obj in gameObjectsToFollow)
                 {
-                    obj.GetComponent<Animator>().SetTrigger("Awake");
-                    followScript.isFollowing = true;
+                    FollowScript followScript = obj.GetComponent<FollowScript>();
+                    if (followScript != null)
+                    {
+                        obj.GetComponent<Animator>().SetTrigger("Awake");
+                        followScript.isFollowing = true;
+                    }
                 }
             }
         }
@@ -35,33 +38,37 @@ public class EnemyAlert : MonoBehaviour
     private void Update()
     {
 
-        foreach (GameObject obj in gameObjectsToFollow)
+        if (this.enabled)
         {
-            if (obj.activeInHierarchy)
-            {
-                break;
-            }
-            else
-            {
-                count++;
 
+            foreach (GameObject obj in gameObjectsToFollow)
+            {
+                if (obj.activeInHierarchy)
+                {
+                    break;
+                }
+                else
+                {
+                    count++;
+
+                }
             }
-        }
-        if (count >= gameObjectsToFollow.Length)
-        {
-            this.gameObject.GetComponent<musicSwapper>().phaseToCombat = false;
-            this.gameObject.GetComponent<musicSwapper>().phaseToCalm = true;
-            
-            
+            if (count >= gameObjectsToFollow.Length)
+            {
+                this.gameObject.GetComponent<musicSwapper>().phaseToCombat = false;
+                this.gameObject.GetComponent<musicSwapper>().phaseToCalm = true;
+
+
                 foreach (DoorScript obj in doorScripts)
                 {
                     obj.doorLocked = false;
                 }
-            
-            
-            
 
-            this.enabled = false;
+
+
+
+                this.enabled = false;
+            }
         }
 
     }

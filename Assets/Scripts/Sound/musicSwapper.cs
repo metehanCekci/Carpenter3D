@@ -24,49 +24,57 @@ public class musicSwapper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        try{
-
-        if (phaseToCombat)
+        if (this.enabled)
         {
-            if (combat.volume < audioLevel)
-            {
-                calm.volume -= phaseSpeed * Time.deltaTime;
-                combat.volume += phaseSpeed * Time.deltaTime;
-            }
-        }
-        else
-        {
-            if (calm.volume < audioLevel)
-            {
-                calm.volume += phaseSpeed * Time.deltaTime;
-                combat.volume -= phaseSpeed * Time.deltaTime;
-            }
-        }
 
+            try
+            {
+
+                if (phaseToCombat)
+                {
+                    if (combat.volume < audioLevel)
+                    {
+                        calm.volume -= phaseSpeed * Time.deltaTime;
+                        combat.volume += phaseSpeed * Time.deltaTime;
+                    }
+                }
+                else if (phaseToCalm)
+                {
+                    if (calm.volume < audioLevel)
+                    {
+                        calm.volume += phaseSpeed * Time.deltaTime;
+                        combat.volume -= phaseSpeed * Time.deltaTime;
+                    }
+                    else
+                    {
+                        this.enabled = false;
+                    }
+                }
+
+            }
+            catch { }
         }
-        catch{}
 
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!hasPhased)
-        if (other.gameObject.CompareTag("Player"))
-        {
-            if (phaseToCombat == false)
+        if (!hasPhased)
+            if (other.gameObject.CompareTag("Player"))
             {
-                phaseToCombat = true;
-                phaseToCalm = false;
+                if (phaseToCombat == false)
+                {
+                    phaseToCombat = true;
+                    phaseToCalm = false;
+                }
+                else
+                {
+                    phaseToCalm = true;
+                    phaseToCombat = false;
+                }
+                hasPhased = true;
+
             }
-            else
-            {
-                phaseToCalm = true;
-                phaseToCombat = false;
-            }
-            hasPhased = true;
-            
-        }
 
     }
 }

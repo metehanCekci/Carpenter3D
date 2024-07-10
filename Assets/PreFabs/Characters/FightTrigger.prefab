@@ -53,8 +53,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.6979933, y: 4.6438665, z: 1}
-  m_Center: {x: 0.066875935, y: 0.32342768, z: 0}
+  m_Size: {x: 23.505157, y: 8.196778, z: 1}
+  m_Center: {x: -0.23174095, y: 2.0998836, z: 0}
 --- !u!114 &4878434417271481255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
   phaseToCombat: 0
   phaseToCalm: 0
   phaseSpeed: 0.5
-  audioLevel: 0.25
+  audioLevel: 0.5
   hasPhased: 0
 --- !u!114 &1988118988587480518
 MonoBehaviour:

@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 public class damagePlayerScript : MonoBehaviour
 {
     public PlayerMovement PM;
-    public PlayerHpBar PHB;
+    public GlobalHpBar PHB;
     public float damageAmt;
     private float timer;
     [HideInInspector] public bool waitForParry = false;

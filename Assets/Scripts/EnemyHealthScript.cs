@@ -9,7 +9,7 @@ public class EnemyHealthScript : MonoBehaviour
     public float hp;
     public bool isBoss = false;
 
-    public PlayerHpBar bossHP;
+    public GlobalHpBar bossHP;
     [SerializeField] bool isTesting = false;
     // Start is called before the first frame update
     void Start()
@@ -34,7 +34,7 @@ public class EnemyHealthScript : MonoBehaviour
         {
             if(this.enabled)
             hp -= damageAmt;
-            if (hp < 0) death();
+            if (hp <= 0) death();
         }
     }
 

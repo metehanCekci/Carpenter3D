@@ -14,6 +14,7 @@ TagManager:
   - Arms
   - pauseBack
   - AudioDontDestroy
+  - DestroyOnStart
   layers:
   - Default
   - TransparentFX

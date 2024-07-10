@@ -45,6 +45,8 @@ public class KaruiAi : MonoBehaviour
     private bool jumpAttackDown = false;
     private bool isWaiting = false;
 
+    private int lastAttackIndex = -1; // Son seçilen saldırının indeksini saklar
+
     void Start()
     {
         agent = this.gameObject.GetComponent<NavMeshAgent>();
@@ -58,7 +60,7 @@ public class KaruiAi : MonoBehaviour
             Debug.Log("Jump Attack Up is true. Current position: " + transform.position + " Target position: " + jumpAttackTrans);
 
             float step = baseSpeed * Time.deltaTime; // Calculate distance to move
-            transform.position = Vector3.MoveTowards(transform.position, jumpAttackTrans, step);
+            transform.position = Vector3.MoveTowards(transform.position, jumpAttackTrans, step *2);
 
             if(Vector3.Distance(transform.position, jumpAttackTrans) < 0.1f)
             {
@@ -68,8 +70,8 @@ public class KaruiAi : MonoBehaviour
         }
         else if(jumpAttackDown)
         {
-            float step = baseSpeed * Time.deltaTime * 5; // Calculate distance to move
-            transform.position = Vector3.MoveTowards(transform.position, jumpAttackTrans2, step);
+            float step = baseSpeed * Time.deltaTime; // Calculate distance to move
+            transform.position = Vector3.MoveTowards(transform.position, jumpAttackTrans2, step * 4);
 
             if(Vector3.Distance(transform.position, jumpAttackTrans2) < 0.1f)
             {
@@ -93,8 +95,6 @@ public class KaruiAi : MonoBehaviour
         clone.transform.position = upSlash1.transform.position;
         clone.transform.rotation = upSlash1.transform.rotation;
 
-
-
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
@@ -108,7 +108,6 @@ public class KaruiAi : MonoBehaviour
         clone1.transform.SetParent(upSlash2.transform.parent);
         clone1.transform.position = upSlash2.transform.position;
         clone1.transform.rotation = upSlash2.transform.rotation;
-
 
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
@@ -124,7 +123,6 @@ public class KaruiAi : MonoBehaviour
         clone2.transform.position = upSlash1.transform.position;
         clone2.transform.rotation = upSlash1.transform.rotation;
 
-
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
@@ -139,7 +137,6 @@ public class KaruiAi : MonoBehaviour
         clone3.transform.position = upSlash2.transform.position;
         clone3.transform.rotation = upSlash2.transform.rotation;
 
-
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
@@ -153,7 +150,6 @@ public class KaruiAi : MonoBehaviour
         clone4.transform.SetParent(upSlash1.transform.parent);
         clone4.transform.position = upSlash1.transform.position;
         clone4.transform.rotation = upSlash1.transform.rotation;
-
 
         agent.speed = (baseSpeed * 9);
         yield return new WaitForSeconds(0.1f);
@@ -183,8 +179,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         clone.GetComponent<BoxCollider>().enabled = false;
 
-
-        Invoke("attackEnder", 3f);
+        Invoke("attackEnder", 2f);
     }
 
     public IEnumerator SlashCombo()
@@ -298,7 +293,6 @@ public class KaruiAi : MonoBehaviour
     {
         this.GetComponent<Animator>().SetTrigger("RangedSlash");
 
-
         agent.speed = 0;
         yield return new WaitForSeconds(rangedDelay);
         GameObject clone = Instantiate(RangedSlash);
@@ -307,18 +301,16 @@ public class KaruiAi : MonoBehaviour
         clone.transform.rotation = RangedSlash.transform.rotation;
         clone.SetActive(true);
 
-
-
         agent.speed = baseSpeed * -10;
         yield return new WaitForSeconds(0.1f);
         agent.speed = 0;
-
 
         Invoke("attackEnder", 2 );
     }
 
     public IEnumerator JumpAttack()
     {
+        this.GetComponent<FollowScript>().isRotating = false;
         this.GetComponent<FollowScript>().isFollowing = false;
         jumpAttackTrans = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z); // For testing
         jumpAttackUp = true;
@@ -328,12 +320,12 @@ public class KaruiAi : MonoBehaviour
 
         yield return new WaitForSeconds(JumpAttackDelay1 - 0.5f);
 
-
-
         jumpAttackTrans2 = new Vector3(transform.position.x, transform.position.y - 5, transform.position.z); // For testing
-        jumpAttackDown = true;
 
-        yield return new WaitForSeconds(0.5f);
+
+        yield return new WaitForSeconds(0.3f);
+        jumpAttackDown = true;
+        yield return new WaitForSeconds(0.2f);
 
         GameObject clone = Instantiate(jumpAttack);
         clone.SetActive(true);
@@ -355,7 +347,6 @@ public class KaruiAi : MonoBehaviour
         Destroy(clone, 1);
         Destroy(clone1, 1);
 
-
         Invoke("attackEnder", 2);
     }
 
@@ -369,18 +360,36 @@ public class KaruiAi : MonoBehaviour
             closingDistance = false;
             agent.speed = 0;
 
-            int attackNumber = Random.Range(1, 80);
 
-            if (attackNumber < 25)
-                StartCoroutine(ForeHeadSlam());
-            else if (attackNumber < 35)
-                StartCoroutine(JumpAttack());
-            else if (attackNumber < 60)
-                StartCoroutine(SlashCombo());
-            else if (attackNumber < 80)
-                StartCoroutine(JetPackAttack());
-            else if (attackNumber < 100)
-                StartCoroutine(SlashCombo2());
+            
+            // Yeni bir saldırı seçmek için döngü
+            int newAttackIndex = -1;
+            while (newAttackIndex == -1 || newAttackIndex == lastAttackIndex)
+            {
+                newAttackIndex = Random.Range(1, 5);
+            }
+            lastAttackIndex = newAttackIndex;
+
+            switch (newAttackIndex)
+            {
+                case 1:
+                    StartCoroutine(ForeHeadSlam());
+                    break;
+                case 2:
+                    StartCoroutine(JumpAttack());
+                    break;
+                case 3:
+                    StartCoroutine(SlashCombo());
+                    break;
+                case 4:
+                    StartCoroutine(JetPackAttack());
+                    break;
+                case 5:
+                    StartCoroutine(SlashCombo2());
+                    break;
+                default:
+                    break;
+            }
 
             isBusy = true;
         }
@@ -392,7 +401,7 @@ public class KaruiAi : MonoBehaviour
         this.GetComponent<Animator>().speed = 1;
         int randomNumber = Random.Range(1, 4);
 
-        if (randomNumber == 1 || randomNumber ==2)
+        if (randomNumber == 1 || randomNumber == 2)
             StartCoroutine(RangedAttack());
         else if (randomNumber == 3)
             StartCoroutine(JetPackAttack());
@@ -408,7 +417,7 @@ public class KaruiAi : MonoBehaviour
 
             if (longDis == 1 || longDis == 2)
                 closeDistance();
-            else if (longDis == 3 || longDis==4)
+            else if (longDis == 3 || longDis == 4)
                 randomRanged();
             else
                 isWaiting = true;
@@ -422,7 +431,6 @@ public class KaruiAi : MonoBehaviour
         closingDistance = true;
         agent.speed = baseSpeed * 3;
         this.GetComponent<Animator>().speed = 2;
-  
     }
 
     public void attackEnder()
@@ -430,13 +438,12 @@ public class KaruiAi : MonoBehaviour
         isBusy = false;
         agent.speed = baseSpeed;
         this.GetComponent<FollowScript>().isFollowing = true;
-                this.GetComponent<Animator>().SetBool("isWalking" , true);      
-        
+        this.GetComponent<FollowScript>().isRotating = true;
+        this.GetComponent<Animator>().SetBool("isWalking" , true);      
     }
 
     public void notWaiting()
     {
         isWaiting = false;
-
     }
 }

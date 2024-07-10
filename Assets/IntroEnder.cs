@@ -11,6 +11,7 @@ public class IntroEnder : MonoBehaviour
     public GameObject bossbar;
     public GameObject SpotLight;
     public GameObject AreaLight;
+    public GameObject subtitles;
     public EnemyHealthScript ehs;
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class IntroEnder : MonoBehaviour
     {
         SpotLight.SetActive(true);
         fs.isRotating = false;
+        subtitles.SetActive(true);
     }
 
     // Update is called once per frame
@@ -41,6 +43,7 @@ public class IntroEnder : MonoBehaviour
             AreaLight.SetActive(true);
             fs.isRotating = true;
             fs.gameObject.GetComponent<Animator>().SetBool("isWalking" , true);
+            
             Destroy(this);
         }
 

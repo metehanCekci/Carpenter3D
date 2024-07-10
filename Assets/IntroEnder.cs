@@ -24,6 +24,7 @@ public class IntroEnder : MonoBehaviour
         SpotLight.SetActive(true);
         fs.isRotating = false;
         subtitles.SetActive(true);
+        SfxScript.Instance.playLightSwitch();
     }
 
     // Update is called once per frame
@@ -43,6 +44,7 @@ public class IntroEnder : MonoBehaviour
             AreaLight.SetActive(true);
             fs.isRotating = true;
             fs.gameObject.GetComponent<Animator>().SetBool("isWalking" , true);
+            SfxScript.Instance.playLightSwitch();
             
             Destroy(this);
         }

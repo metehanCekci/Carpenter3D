@@ -17,6 +17,8 @@ public class SfxScript : MonoBehaviour
     [SerializeField] AudioClip Hurt;
     [SerializeField] AudioClip Parry;
     [SerializeField] AudioClip Swing;
+    [SerializeField] AudioClip LightSwitch;
+    [SerializeField] AudioClip Crush;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,6 +67,14 @@ public class SfxScript : MonoBehaviour
     public void playAttack()
     {
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(Attack);
+    }
+    public void playCrush()
+    {
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Crush);
+    }
+    public void playLightSwitch()
+    {
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(LightSwitch);
     }
     public void playHit()
     {

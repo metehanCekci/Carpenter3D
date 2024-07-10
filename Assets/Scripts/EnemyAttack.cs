@@ -42,27 +42,37 @@ public class EnemyAttack : MonoBehaviour
 
         isAttacking = true;
         yield return new WaitForSeconds(firstAttackTiming);
-        slashEffect.SetActive(true);
-        this.gameObject.GetComponent<NavMeshAgent>().speed = 40;
+        GameObject clone = Instantiate(slashEffect);
+        clone.transform.position = slashEffect.transform.position;
+        clone.transform.rotation = slashEffect.transform.rotation;
+        clone.transform.SetParent(slashEffect.transform.parent);
+        clone.SetActive(true);
+        this.gameObject.GetComponent<NavMeshAgent>().speed = 30;
         yield return new WaitForSeconds(0.1f);
-        slashEffect.transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
+        clone.GetComponent<BoxCollider>().enabled = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
         yield return new WaitForSeconds(0.2f);
-        slashEffect.SetActive(false);
-        yield return new WaitForSeconds(secondAttackTiming);
-        slashEffect2.SetActive(true);
-       this.gameObject.GetComponent<NavMeshAgent>().speed = 40;
-        yield return new WaitForSeconds(0.1f);
-        slashEffect2.transform.GetChild(0).GetComponent<BoxCollider>().enabled = false;
-        this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
-        yield return new WaitForSeconds(0.2f);
-        slashEffect2.SetActive(false);
 
-        //Collider[] hitEnemies = Physics.OverlapSphere(attackPos.transform.position, radius);
-        slashEffect.transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
-        slashEffect2.transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
+        yield return new WaitForSeconds(secondAttackTiming);
+        GameObject clone2 = Instantiate(slashEffect2);
+        clone2.transform.position = slashEffect2.transform.position;
+        clone2.transform.rotation = slashEffect2.transform.rotation;
+        clone2.transform.SetParent(slashEffect2.transform.parent);
+        clone2.SetActive(true);
+       this.gameObject.GetComponent<NavMeshAgent>().speed = 30;
+        yield return new WaitForSeconds(0.1f);
+        clone2.GetComponent<BoxCollider>().enabled = false;
+        this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
+        yield return new WaitForSeconds(0.2f);
+
+        Destroy(clone , 1);
+        Destroy(clone2 , 1);
+
+
         isAttacking = false;
         this.gameObject.GetComponent<NavMeshAgent>().speed = 3;
+
+
 
     }
 

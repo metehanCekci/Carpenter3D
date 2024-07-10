@@ -18,7 +18,7 @@ public class EnemyAlert : MonoBehaviour
                     obj.doorLocked = true;
                 }
             
-            
+
             
 
             foreach (GameObject obj in gameObjectsToFollow)
@@ -26,6 +26,7 @@ public class EnemyAlert : MonoBehaviour
                 FollowScript followScript = obj.GetComponent<FollowScript>();
                 if (followScript != null)
                 {
+                    obj.GetComponent<Animator>().SetTrigger("Awake");
                     followScript.isFollowing = true;
                 }
             }

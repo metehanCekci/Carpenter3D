@@ -264,27 +264,34 @@ public class KaruiAi : MonoBehaviour
 
     public IEnumerator SlashCombo2()
     {
-        this.GetComponent<Animator>().SetTrigger("SlashCombo2");
+        this.GetComponent<Animator>().SetTrigger("TwoSlash");
 
         yield return new WaitForSeconds(slashCombo2Delay);
-        combo2Slash1.SetActive(true);
+        GameObject clone = Instantiate(combo2Slash1);
+        clone.SetActive(true);
+
+        clone.transform.SetParent(combo2Slash1.transform.parent);
+        clone.transform.position = combo2Slash1.transform.position;
+        clone.transform.rotation = combo2Slash1.transform.rotation;
         agent.speed *= 3;
         yield return new WaitForSeconds(0.1f);
-        combo2Slash1.SetActive(false);
+        clone.GetComponent<BoxCollider>().enabled = false;
         agent.speed = 0;
 
         yield return new WaitForSeconds(slashCombo2Delay2);
-        combo2Slash1.SetActive(true);
+        GameObject clone1 = Instantiate(combo2Slash2);
+        clone1.SetActive(true);
+
+        clone1.transform.SetParent(combo2Slash2.transform.parent);
+        clone1.transform.position = combo2Slash2.transform.position;
+        clone1.transform.rotation = combo2Slash2.transform.rotation;
         agent.speed *= 3;
         yield return new WaitForSeconds(0.1f);
-        combo2Slash1.SetActive(false);
+        clone1.GetComponent<BoxCollider>().enabled = false;
         agent.speed = 0;
 
-        yield return new WaitForSeconds(slashCombo2Delay);
-        combo2Slash2.SetActive(true);
-        agent.speed *= 3;
-        yield return new WaitForSeconds(0.1f);
-        combo2Slash2.SetActive(false);
+        Destroy(clone,1);
+        Destroy(clone1,1);
 
         Invoke("attackEnder", 2 -0.1f);
     }
@@ -366,7 +373,7 @@ public class KaruiAi : MonoBehaviour
             int newAttackIndex = -1;
             while (newAttackIndex == -1 || newAttackIndex == lastAttackIndex)
             {
-                newAttackIndex = Random.Range(1, 5);
+                newAttackIndex = Random.Range(1, 6);
             }
             lastAttackIndex = newAttackIndex;
 

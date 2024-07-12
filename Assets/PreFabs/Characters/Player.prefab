@@ -3038,7 +3038,7 @@ GameObject:
   - component: {fileID: 1897882623602166819}
   - component: {fileID: 64645398582976423}
   - component: {fileID: 7678819580618548670}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Weapons
   m_TagString: Weapons
   m_Icon: {fileID: 0}
@@ -3092,7 +3092,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1
+  far clip plane: 13.8
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5

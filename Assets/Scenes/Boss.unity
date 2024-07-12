@@ -10219,11 +10219,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1897882623602166819, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: m_Depth
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1897882623602166819, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: m_ClearFlags
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1897882623602166819, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: field of view
@@ -10255,7 +10255,7 @@ PrefabInstance:
       objectReference: {fileID: 153396943}
     - target: {fileID: 5440876437997464967, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: m_Depth
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7678819580618548670, guid: a90848be3d9ed894fa1ad12473faf4d2, type: 3}
       propertyPath: m_RequiresDepthTextureOption

@@ -166,7 +166,7 @@ public class KaruiAi : MonoBehaviour
         this.GetComponent<Animator>().SetTrigger("JetPackAttack");
 
         yield return new WaitForSeconds(1.3f);
-        agent.speed = baseSpeed * 8;
+        agent.speed = baseSpeed * 12;
         yield return new WaitForSeconds(jetpackDelay);
         agent.speed = 0;
         GameObject clone = Instantiate(jetpackSlash);
@@ -273,7 +273,7 @@ public class KaruiAi : MonoBehaviour
         clone.transform.SetParent(combo2Slash1.transform.parent);
         clone.transform.position = combo2Slash1.transform.position;
         clone.transform.rotation = combo2Slash1.transform.rotation;
-        agent.speed *= 3;
+        agent.speed = baseSpeed * 20;
         yield return new WaitForSeconds(0.1f);
         clone.GetComponent<BoxCollider>().enabled = false;
         agent.speed = 0;
@@ -285,7 +285,7 @@ public class KaruiAi : MonoBehaviour
         clone1.transform.SetParent(combo2Slash2.transform.parent);
         clone1.transform.position = combo2Slash2.transform.position;
         clone1.transform.rotation = combo2Slash2.transform.rotation;
-        agent.speed *= 3;
+        agent.speed = baseSpeed * 20;
         yield return new WaitForSeconds(0.1f);
         clone1.GetComponent<BoxCollider>().enabled = false;
         agent.speed = 0;
@@ -335,6 +335,7 @@ public class KaruiAi : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         GameObject clone = Instantiate(jumpAttack);
+        SfxScript.Instance.playCrush();
         clone.SetActive(true);
         clone.transform.position = jumpAttack.transform.position;
         clone.transform.rotation = jumpAttack.transform.rotation;
@@ -344,6 +345,7 @@ public class KaruiAi : MonoBehaviour
 
         yield return new WaitForSeconds(JumpAttackDelay2);
         GameObject clone1 = Instantiate(jumpAttack);
+        SfxScript.Instance.playCrush();
         clone1.SetActive(true);
         clone1.transform.position = jumpAttack.transform.position;
         clone1.transform.rotation = jumpAttack.transform.rotation;

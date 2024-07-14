@@ -233,7 +233,7 @@ public class SceneReloader : MonoBehaviour
 
 public void BonfireManager(GameObject Player)
 {
-    ReadJson.Instance.ReadSaveFile();
+
     if (ReadJson.Instance == null)
     {
         Debug.LogError("ReadJson Instance is null");

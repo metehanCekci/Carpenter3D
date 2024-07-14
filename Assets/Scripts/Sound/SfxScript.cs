@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SfxScript : MonoBehaviour
 {
-
     public static SfxScript Instance { get; private set; }
     [SerializeField] AudioClip Jump;
     [SerializeField] AudioClip Dash;
@@ -19,101 +18,117 @@ public class SfxScript : MonoBehaviour
     [SerializeField] AudioClip Swing;
     [SerializeField] AudioClip LightSwitch;
     [SerializeField] AudioClip Crush;
-
     [SerializeField] AudioClip Woosh;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+    private AudioSource audioSource;
+    private AudioSource loopAudioSource;
 
     void Awake()
     {
-                if (Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // Persist across scenes
+            audioSource = GetComponent<AudioSource>();
+            loopAudioSource = gameObject.AddComponent<AudioSource>();
+            loopAudioSource.loop = true;
         }
         else
         {
-            Destroy(gameObject); // Fazladan oluşturulan nesneyi yok et
+            Destroy(gameObject); // Destroy extra instance
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void playJump()
     {
-        gameObject.GetComponent<AudioSource>().PlayOneShot(Jump);
+        audioSource.PlayOneShot(Jump);
     }
+
     public void playDash()
     {
-        gameObject.GetComponent<AudioSource>().PlayOneShot(Dash);
+        audioSource.PlayOneShot(Dash);
     }
+
     public void playSlide()
     {
-        gameObject.GetComponent<AudioSource>().PlayOneShot(Slide);
+        if (!loopAudioSource.isPlaying)
+        {
+            loopAudioSource.clip = Slide;
+            loopAudioSource.Play();
+        }
     }
+
+    public void stopSlide()
+    {
+        if (loopAudioSource.isPlaying)
+        {
+            loopAudioSource.Stop();
+        }
+    }
+
     public void playSlam()
     {
-        gameObject.GetComponent<AudioSource>().PlayOneShot(Slam);
+        audioSource.PlayOneShot(Slam);
     }
+
     public void playFall()
     {
-        gameObject.GetComponent<AudioSource>().PlayOneShot(Fall);
+        audioSource.PlayOneShot(Fall);
     }
+
     public void playAttack()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Attack);
+        audioSource.PlayOneShot(Attack);
     }
+
     public void playCrush()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Crush);
+        audioSource.PlayOneShot(Crush);
     }
+
     public void playLightSwitch()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(LightSwitch);
+        audioSource.PlayOneShot(LightSwitch);
     }
+
     public void playHit()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Hit);
+        audioSource.PlayOneShot(Hit);
     }
+
     public void playFootstep()
     {
-        this.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Footstep);
-        Invoke("resetPitch",0.5f);
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(Footstep);
+        Invoke("resetPitch", 0.5f);
     }
 
     public void playHurt()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Hurt);
+        audioSource.PlayOneShot(Hurt);
     }
+
     public void playParry()
     {
-        this.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Parry);
-        Invoke("resetPitch",0.5f);     
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(Parry);
+        Invoke("resetPitch", 0.5f);
     }
 
     public void playSwing()
     {
-        this.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Swing);
-        Invoke("resetPitch",0.5f);
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(Swing);
+        Invoke("resetPitch", 0.5f);
     }
 
-        public void playWoosh()
+    public void playWoosh()
     {
-        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Woosh);
+        audioSource.PlayOneShot(Woosh);
     }
 
     public void resetPitch()
-    {   
-        this.gameObject.GetComponent<AudioSource>().pitch = 1;
+    {
+        audioSource.pitch = 1;
     }
 }

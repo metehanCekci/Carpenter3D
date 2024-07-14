@@ -135,7 +135,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     void Move()
     {
         if (isDashing && !isDead && !pauseScript.isPaused) return;
@@ -193,7 +192,6 @@ public class PlayerMovement : MonoBehaviour
         else
             parryCoolDown = false;    
         }    
-        
     }
 
     void ApplyGravity()
@@ -269,11 +267,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void SlamImpact()
     {
-        
         SfxScript.Instance.playSlam();
         isSlamming = false;
         Debug.Log("Slam Impact!");
-        
     }
 
     void OnCrouch(InputAction.CallbackContext context)
@@ -283,16 +279,17 @@ public class PlayerMovement : MonoBehaviour
             if (isGrounded && moveInput != Vector2.zero)
             {
                 isSliding = true;
+                SfxScript.Instance.playSlide();
                 slideDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized; // Use the player's forward direction
                 capsuleCollider.height = crouchHeight;
             }
             else if (!isGrounded)
             {
-                if(hasSlam)
+                if (hasSlam)
                 {
-                isSlamming = true;
-                rigidBody.AddForce(Vector3.down * fastFallMultiplier * slamForce, ForceMode.Impulse);
-                Debug.Log(rigidBody.velocity.y);
+                    isSlamming = true;
+                    rigidBody.AddForce(Vector3.down * fastFallMultiplier * slamForce, ForceMode.Impulse);
+                    Debug.Log(rigidBody.velocity.y);
                 }
             }
             else
@@ -308,6 +305,7 @@ public class PlayerMovement : MonoBehaviour
         isCrouching = false;
         isSliding = false;
         capsuleCollider.height = standingHeight;
+        SfxScript.Instance.stopSlide(); // Stop looping slide sound when crouch is canceled
     }
 
     void OnDash(InputAction.CallbackContext context)
@@ -419,13 +417,13 @@ public class PlayerMovement : MonoBehaviour
             return false;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength)
-            )
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength))
         {
             return hit.normal != Vector3.up;
         }
         return false;
     }
+
     bool PlatformTagCheck()
     {
         RaycastHit hit;

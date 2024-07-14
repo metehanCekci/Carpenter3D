@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.AI;
 
 public class KaruiAi : MonoBehaviour
@@ -47,6 +48,8 @@ public class KaruiAi : MonoBehaviour
 
     private int lastAttackIndex = -1; // Son seçilen saldırının indeksini saklar
 
+    private List<Coroutine> runningCoroutines = new List<Coroutine>();
+
     void Start()
     {
         agent = this.gameObject.GetComponent<NavMeshAgent>();
@@ -64,7 +67,6 @@ public class KaruiAi : MonoBehaviour
 
             if (Vector3.Distance(transform.position, jumpAttackTrans) < 0.1f)
             {
-                Debug.Log("Reached target position.");
                 jumpAttackUp = false;
             }
         }
@@ -75,10 +77,46 @@ public class KaruiAi : MonoBehaviour
 
             if (Vector3.Distance(transform.position, jumpAttackTrans2) < 0.1f)
             {
-                Debug.Log("Reached target position.");
                 jumpAttackDown = false;
                 agent.enabled = true;
             }
+        }
+    }
+
+    void OnDisable()
+    {
+        // Stop all running coroutines
+        foreach (var coroutine in runningCoroutines)
+        {
+            StopCoroutine(coroutine);
+        }
+        runningCoroutines.Clear();
+
+        // Reset any ongoing actions
+        isBusy = false;
+        closingDistance = false;
+        jumpAttackUp = false;
+        jumpAttackDown = false;
+        isWaiting = false;
+
+        // Reset agent speed and re-enable it if needed
+        agent.speed = 0;
+        if (!agent.enabled)
+        {
+            agent.enabled = true;
+        }
+
+        // Reset animator
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.ResetTrigger("ForeHeadSlam");
+            animator.ResetTrigger("JetPackAttack");
+            animator.ResetTrigger("SpinSlashAttack");
+            animator.ResetTrigger("TwoSlash");
+            animator.ResetTrigger("RangedSlash");
+            animator.ResetTrigger("JumpAttack");
+            animator.SetBool("isWalking", false);
         }
     }
 
@@ -166,6 +204,7 @@ public class KaruiAi : MonoBehaviour
         this.GetComponent<Animator>().SetTrigger("JetPackAttack");
 
         yield return new WaitForSeconds(1.3f);
+        SfxScript.Instance.playWoosh();
         agent.speed = baseSpeed * 12;
         yield return new WaitForSeconds(jetpackDelay);
         agent.speed = 0;
@@ -383,19 +422,19 @@ public class KaruiAi : MonoBehaviour
                 switch (newAttackIndex)
                 {
                     case 1:
-                        StartCoroutine(ForeHeadSlam());
+                        runningCoroutines.Add(StartCoroutine(ForeHeadSlam()));
                         break;
                     case 2:
-                        StartCoroutine(JumpAttack());
+                        runningCoroutines.Add(StartCoroutine(JumpAttack()));
                         break;
                     case 3:
-                        StartCoroutine(SlashCombo());
+                        runningCoroutines.Add(StartCoroutine(SlashCombo()));
                         break;
                     case 4:
-                        StartCoroutine(JetPackAttack());
+                        runningCoroutines.Add(StartCoroutine(JetPackAttack()));
                         break;
                     case 5:
-                        StartCoroutine(SlashCombo2());
+                        runningCoroutines.Add(StartCoroutine(SlashCombo2()));
                         break;
                     default:
                         break;
@@ -413,9 +452,9 @@ public class KaruiAi : MonoBehaviour
         int randomNumber = Random.Range(1, 4);
 
         if (randomNumber == 1 || randomNumber == 2)
-            StartCoroutine(RangedAttack());
+            runningCoroutines.Add(StartCoroutine(RangedAttack()));
         else if (randomNumber == 3)
-            StartCoroutine(JetPackAttack());
+            runningCoroutines.Add(StartCoroutine(JetPackAttack()));
 
         isBusy = true;
     }
@@ -450,13 +489,16 @@ public class KaruiAi : MonoBehaviour
     public void attackEnder()
     {
         isBusy = false;
-        agent.speed = baseSpeed;
-        if(!this.gameObject.GetComponent<ResetBoss>().reset)
+        if (this.enabled)
         {
-        this.GetComponent<FollowScript>().isFollowing = true;
-        this.GetComponent<FollowScript>().isRotating = true;
-        this.GetComponent<Animator>().SetBool("isWalking", true);
-        this.gameObject.GetComponent<ResetBoss>().reset = false;
+            agent.speed = baseSpeed;
+            this.GetComponent<FollowScript>().isFollowing = true;
+            this.GetComponent<FollowScript>().isRotating = true;
+            this.GetComponent<Animator>().SetBool("isWalking", true);
+        }
+        else
+        {
+            agent.speed = 0;
         }
     }
 

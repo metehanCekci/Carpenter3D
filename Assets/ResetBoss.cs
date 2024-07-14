@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class ResetBoss : MonoBehaviour
 {
-    public bool reset = false;
     public GameObject music;
     public GameObject trigger;
     public GameObject bossBar;
@@ -16,10 +15,10 @@ public class ResetBoss : MonoBehaviour
     public void Reset()
     {
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
-        reset = true;
         this.gameObject.GetComponent<KaruiAi>().enabled = false;
         this.gameObject.GetComponent<FollowScript>().isFollowing = false;
         this.gameObject.GetComponent<FollowScript>().isRotating = false;
+        Debug.Log("off");
         trigger.SetActive(true);
 
 

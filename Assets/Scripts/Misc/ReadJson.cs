@@ -121,7 +121,6 @@ public class ReadJson : MonoBehaviour
         string json = JsonUtility.ToJson(saveFile, true);
         string path = Path.Combine(Application.streamingAssetsPath, "SaveFile.JSON");
         File.WriteAllText(path, json);
-        Debug.Log("SaveFile JSON written: " + path);
     }
 
     public void WriteSaveQuick()
@@ -129,6 +128,5 @@ public class ReadJson : MonoBehaviour
         string json = JsonUtility.ToJson(saveQuick, true);
         string path = Path.Combine(Application.streamingAssetsPath, "SaveQuick.JSON");
         File.WriteAllText(path, json);
-        Debug.Log("SaveQuick JSON written: " + path);
     }
 }

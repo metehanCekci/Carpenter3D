@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class IntroEnder : MonoBehaviour
 {
+    public float enemySpeed;
     public GameObject mus;
     public FollowScript fs;
     public GameObject close;
@@ -38,9 +40,18 @@ public class IntroEnder : MonoBehaviour
         if(this.gameObject.activeInHierarchy)
         if(remainingTime <= 0)
         {
-            mus.SetActive(true);
+            IntroEnd();
+        }
+
+        
+    }
+
+    public void IntroEnd()
+    {
+                    mus.SetActive(true);
+            fs.gameObject.GetComponent<NavMeshAgent>().speed = enemySpeed;
             fs.isFollowing = true;
-            fs.gameObject.GetComponent<KaruiAi>().enabled = true;
+
             close.SetActive(true);
             afar.SetActive(true);
             ehs.enabled = true;
@@ -49,12 +60,10 @@ public class IntroEnder : MonoBehaviour
             AreaLight.SetActive(true);
             fs.isRotating = true;
             fs.gameObject.GetComponent<Animator>().SetBool("isWalking" , true);
+            fs.gameObject.GetComponent<KaruiAi>().enabled = true;
             SfxScript.Instance.playLightSwitch();
 
             
             this.gameObject.SetActive(false);
-        }
-
-        
     }
 }

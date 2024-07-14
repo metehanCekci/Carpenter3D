@@ -41,36 +41,40 @@ public class FollowScript : MonoBehaviour
             return;
         }
 
-            if(isRotating)
+        if (this.enabled)
+        {
+
+            if (isRotating)
             {
-            // Find the vector pointing from our position to the target
-            direction = (target.position - transform.position).normalized;
+                // Find the vector pointing from our position to the target
+                direction = (target.position - transform.position).normalized;
 
-            // Create the rotation we need to be in to look at the target
-            lookRotation = Quaternion.LookRotation(direction);
+                // Create the rotation we need to be in to look at the target
+                lookRotation = Quaternion.LookRotation(direction);
 
-            // Rotate us over time according to speed until we are in the required rotation
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * RotationSpeed);
+                // Rotate us over time according to speed until we are in the required rotation
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * RotationSpeed);
             }
-        
 
-        if (isFollowing && !isTouching)
-        {
-            navMeshAgent.SetDestination(target.position);
-        }
-        else if (isTouching)
-        {
-            navMeshAgent.SetDestination(transform.position);
-        }
 
-        if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
-        {
-            navMeshAgent.updateRotation = false;
-            // Insert your rotation code here
-        }
-        else
-        {
-            navMeshAgent.updateRotation = true;
+            if (isFollowing && !isTouching)
+            {
+                navMeshAgent.SetDestination(target.position);
+            }
+            else if (isTouching)
+            {
+                navMeshAgent.SetDestination(transform.position);
+            }
+
+            if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
+            {
+                navMeshAgent.updateRotation = false;
+                // Insert your rotation code here
+            }
+            else
+            {
+                navMeshAgent.updateRotation = true;
+            }
         }
     }
 

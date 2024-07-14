@@ -62,6 +62,7 @@ public class GlobalHpBar : MonoBehaviour
             Cursor.visible = true;
             cam.GetComponent<CameraController>().enabled = false;
             isDead = true;
+            Time.timeScale = 0;
         }
 
         if (healthSlider.value != easeSlider.value)

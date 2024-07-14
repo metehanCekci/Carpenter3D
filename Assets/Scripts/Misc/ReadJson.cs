@@ -56,6 +56,8 @@ public class ReadJson : MonoBehaviour
             public int enemyID;
         }
         public List<Enemy> enemies = new List<Enemy>();
+
+        public bool bossIntro;
     }
 
     public SaveFile saveFile = new SaveFile();
@@ -69,7 +71,7 @@ public class ReadJson : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+        WriteSaveQuick();
     }
 
     void Awake()

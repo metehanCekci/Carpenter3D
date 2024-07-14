@@ -19,6 +19,8 @@ public class SfxScript : MonoBehaviour
     [SerializeField] AudioClip Swing;
     [SerializeField] AudioClip LightSwitch;
     [SerializeField] AudioClip Crush;
+
+    [SerializeField] AudioClip Woosh;
     // Start is called before the first frame update
     void Start()
     {
@@ -103,6 +105,11 @@ public class SfxScript : MonoBehaviour
         this.gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.9f,1.1f);
         this.gameObject.GetComponent<AudioSource>().PlayOneShot(Swing);
         Invoke("resetPitch",0.5f);
+    }
+
+        public void playWoosh()
+    {
+        this.gameObject.GetComponent<AudioSource>().PlayOneShot(Woosh);
     }
 
     public void resetPitch()

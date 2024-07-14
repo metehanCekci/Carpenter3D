@@ -9,11 +9,21 @@ public class cutsceneTrigger : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
+            ReadJson.Instance.ReadSaveQuick();
+            if(!ReadJson.Instance.saveQuick.bossIntro)
+            {
             Debug.Log("intro");
             anim.SetTrigger("Intro");
 
             ass.Play();
             ass.GetComponent<IntroEnder>().startIntro();
+
+            ReadJson.Instance.saveQuick.bossIntro = true;
+            }
+            else
+            {
+                ass.GetComponent<IntroEnder>().IntroEnd();
+            }
         }
     }
 

@@ -1,9 +1,7 @@
 {
-    "HP": 100,
-    "Energy": 0,
-    "syringeCount": 0,
-    "enemies": {
-      
-    }
-  }
-  
+    "HP": 100.0,
+    "Energy": 0.0,
+    "syringeCount": 0.0,
+    "enemies": [],
+    "bossIntro": false
+}

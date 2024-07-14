@@ -19,6 +19,7 @@ public class HitScan : MonoBehaviour
     private void OnTriggerStay(Collider other) {
         if(other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("detect");
             this.transform.parent.GetComponent<EnemyAttack>().startAttack(other.gameObject);
         }
     }

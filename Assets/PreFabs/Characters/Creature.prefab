@@ -8314,6 +8314,7 @@ MonoBehaviour:
   hp: 50
   pm: {fileID: 0}
   deathMenu: {fileID: 0}
+  isDead: 0
 --- !u!1 &6220178041157196585
 GameObject:
   m_ObjectHideFlags: 0
@@ -12224,6 +12225,7 @@ GameObject:
   - component: {fileID: 8220250433525952104}
   - component: {fileID: 2160979743934117123}
   - component: {fileID: 7482709057155792194}
+  - component: {fileID: 8969420914398343291}
   m_Layer: 6
   m_Name: Creature
   m_TagString: Hitable
@@ -12335,6 +12337,7 @@ MonoBehaviour:
   target: {fileID: 0}
   isRotating: 1
   RotationSpeed: 1
+  maxSpeed: 3
 --- !u!114 &8220250433525952104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12394,6 +12397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 50
+  maxhp: 50
   isBoss: 1
   bossHP: {fileID: 2592936497368090105}
   isTesting: 0
@@ -12413,3 +12417,20 @@ MonoBehaviour:
   slashEffect2: {fileID: 2195729621034955854}
   firstAttackTiming: 0.84
   secondAttackTiming: 0.32
+  isAttacking: 0
+--- !u!114 &8969420914398343291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185134760615165259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f49a5cbd44020d44b7ada9ebc3fe0b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags:
+  - Reset
+  - Enemy
+  - Creature

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class EnemyHealthScript : MonoBehaviour
 {
     public float hp;
+    public float maxhp;
     public bool isBoss = false;
 
     public GlobalHpBar bossHP;
@@ -14,7 +15,7 @@ public class EnemyHealthScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        hp = maxhp;
     }
 
     // Update is called once per frame

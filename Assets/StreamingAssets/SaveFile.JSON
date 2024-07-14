@@ -1,5 +1,5 @@
 {
-    "LastBonfireID": 3,
+    "LastBonfireID": 1,
     "hasDoubleJump": false,
     "hasGroundPound": false,
     "hasParry": false,
@@ -13,6 +13,28 @@
     "attackPower": 10.0,
     "attackSpeed": 0.4000000059604645,
     "attackReach": 2.5,
-    "bonfires": [],
+    "bonfires": [
+        {
+            "BonfireID": 0,
+            "BonfirePos": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            }
+        },
+
+        {
+            "BonfireID": 1,
+            "BonfirePos": {
+                "position": {
+                    "x": 0.536636889,
+                    "y": 24.1800003,
+                    "z": -54.6279144
+                }
+            }
+        }
+    ],
     "bosses": []
 }

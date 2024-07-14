@@ -6,75 +6,56 @@ public class musicSwapper : MonoBehaviour
 {
     [SerializeField] AudioSource calm;
     [SerializeField] AudioSource combat;
-    [SerializeField] public bool phaseToCombat = false;
-
-    [SerializeField] public bool phaseToCalm = false;
+    [SerializeField] public bool isCombat = false;
 
     [SerializeField] float phaseSpeed = 0.5f;
+    [SerializeField] float audioLevel = 0.5f;
 
-    [SerializeField] float audioLevel = 0.25f;
-
-    [SerializeField] bool hasPhased = false;
-    // Start is called before the first frame update
     void Start()
     {
-
+        // Ensure initial volumes are set
+        calm.volume = audioLevel;
+        combat.volume = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (this.enabled)
         {
-
             try
             {
-
-                if (phaseToCombat)
+                if (isCombat)
                 {
                     if (combat.volume < audioLevel)
                     {
-                        calm.volume -= phaseSpeed * Time.deltaTime;
-                        combat.volume += phaseSpeed * Time.deltaTime;
+                        calm.volume = Mathf.Max(0, calm.volume - phaseSpeed * Time.deltaTime);
+                        combat.volume = Mathf.Min(audioLevel, combat.volume + phaseSpeed * Time.deltaTime);
                     }
                 }
-                else if (phaseToCalm)
+                else
                 {
                     if (calm.volume < audioLevel)
                     {
-                        calm.volume += phaseSpeed * Time.deltaTime;
-                        combat.volume -= phaseSpeed * Time.deltaTime;
-                    }
-                    else
-                    {
-                        this.enabled = false;
+                        calm.volume = Mathf.Min(audioLevel, calm.volume + phaseSpeed * Time.deltaTime);
+                        combat.volume = Mathf.Max(0, combat.volume - phaseSpeed * Time.deltaTime);
                     }
                 }
-
             }
-            catch { }
+            catch
+            {
+                // Handle exceptions if necessary
+            }
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!hasPhased)
-            if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (!isCombat)
             {
-                if (phaseToCombat == false)
-                {
-                    phaseToCombat = true;
-                    phaseToCalm = false;
-                }
-                else
-                {
-                    phaseToCalm = true;
-                    phaseToCombat = false;
-                }
-                hasPhased = true;
-
+                isCombat = true;
             }
-
+        }
     }
 }

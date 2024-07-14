@@ -13,7 +13,7 @@ public class EnemyAttack : MonoBehaviour
     public float secondAttackTiming;
   
 
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +43,7 @@ public class EnemyAttack : MonoBehaviour
         isAttacking = true;
         yield return new WaitForSeconds(firstAttackTiming);
         GameObject clone = Instantiate(slashEffect);
+        Destroy(clone , 1);
         clone.transform.position = slashEffect.transform.position;
         clone.transform.rotation = slashEffect.transform.rotation;
         clone.transform.SetParent(slashEffect.transform.parent);
@@ -55,6 +56,7 @@ public class EnemyAttack : MonoBehaviour
 
         yield return new WaitForSeconds(secondAttackTiming);
         GameObject clone2 = Instantiate(slashEffect2);
+        Destroy(clone2 , 1);
         clone2.transform.position = slashEffect2.transform.position;
         clone2.transform.rotation = slashEffect2.transform.rotation;
         clone2.transform.SetParent(slashEffect2.transform.parent);
@@ -65,8 +67,8 @@ public class EnemyAttack : MonoBehaviour
         this.gameObject.GetComponent<NavMeshAgent>().speed = 0;
         yield return new WaitForSeconds(0.2f);
 
-        Destroy(clone , 1);
-        Destroy(clone2 , 1);
+        
+        
 
 
         isAttacking = false;

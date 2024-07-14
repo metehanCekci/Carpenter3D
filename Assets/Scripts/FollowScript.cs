@@ -13,6 +13,7 @@ public class FollowScript : MonoBehaviour
 
     // Values that will be set in the Inspector
     public float RotationSpeed = 1;
+    public float maxSpeed;
 
     // Values for internal use
     private Quaternion lookRotation;

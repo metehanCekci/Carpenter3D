@@ -3,5 +3,5 @@
     "Energy": 0.0,
     "syringeCount": 0.0,
     "enemies": [],
-    "bossIntro": true
+    "bossIntro": false
 }

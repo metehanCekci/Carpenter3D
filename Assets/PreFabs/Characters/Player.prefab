@@ -187,8 +187,10 @@ MonoBehaviour:
   slideSpeed: 20
   jumpForce: 12
   slamForce: 30
+  hasSlam: 0
   dashForce: 60
   dashCooldown: 1
+  hasDash: 0
   gravity: -9.81
   crouchHeight: 0.7
   dashCrouchHeight: 1.2
@@ -201,6 +203,7 @@ MonoBehaviour:
   bloodEffectPrefab: {fileID: 0}
   pauseScript: {fileID: 0}
   parrySuccessful: 0
+  hasParry: 0
   isDead: 0
   isGrounded: 0
   isDashing: 0
@@ -315,6 +318,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 3a298527-57db-46be-a88b-a3147da91c4b
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7d460e79-4896-4127-9f84-a2235d61882c
+    m_ActionName: Player/Interact[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -601,7 +608,7 @@ Transform:
   m_GameObject: {fileID: 2677163961299194988}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.77, y: 1.47, z: -8.3}
+  m_LocalPosition: {x: -1.14, y: 1.44, z: -8.13}
   m_LocalScale: {x: 100, y: 100, z: 62.6489}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2694,6 +2701,8 @@ GameObject:
   - component: {fileID: 3669809018596735463}
   - component: {fileID: 2791279914868130446}
   - component: {fileID: 7956180517079064749}
+  - component: {fileID: 2793991636938300878}
+  - component: {fileID: 1480904443437146806}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -2791,8 +2800,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 0
+  m_RequiresOpaqueTextureOption: 0
   m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1
@@ -2836,6 +2845,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 774258668460180933}
   mouseSensivity: 2
+--- !u!65 &2793991636938300878
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8208114605378139674}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.061235428, y: 0.09897995, z: 3.7655487}
+  m_Center: {x: -0.008061409, y: -0.0008659363, z: 2.0280266}
+--- !u!114 &1480904443437146806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8208114605378139674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fbc29d115b114d4caa365481744b76e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8271178468241360444
 GameObject:
   m_ObjectHideFlags: 0
@@ -3093,7 +3135,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 13.8
-  field of view: 26.991467
+  field of view: 26.84
   orthographic: 0
   orthographic size: 5
   m_Depth: 100
@@ -3253,8 +3295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 0
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 0
+  m_RequiresOpaqueTextureOption: 0
   m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1

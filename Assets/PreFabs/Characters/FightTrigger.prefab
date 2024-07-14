@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4563220395856501121}
   - component: {fileID: 1111879795207540532}
-  - component: {fileID: 4878434417271481255}
   - component: {fileID: 1988118988587480518}
+  - component: {fileID: 2969984666662822554}
   m_Layer: 0
   m_Name: FightTrigger
   m_TagString: Untagged
@@ -55,25 +55,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 23.505157, y: 8.196778, z: 1}
   m_Center: {x: -0.23174095, y: 2.0998836, z: 0}
---- !u!114 &4878434417271481255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 615913945275282043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc39e3f60f885ca47804851f0c36098f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  calm: {fileID: 0}
-  combat: {fileID: 0}
-  phaseToCombat: 0
-  phaseToCalm: 0
-  phaseSpeed: 0.5
-  audioLevel: 0.5
-  hasPhased: 0
 --- !u!114 &1988118988587480518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,3 +73,19 @@ MonoBehaviour:
   doorScripts:
   - {fileID: 0}
   - {fileID: 0}
+  ms: {fileID: 0}
+--- !u!114 &2969984666662822554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615913945275282043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f49a5cbd44020d44b7ada9ebc3fe0b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags:
+  - Reset
+  - FightTrigger

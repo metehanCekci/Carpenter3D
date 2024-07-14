@@ -20,7 +20,7 @@ public class SubtitleScript : MonoBehaviour
 
     public List<Subtitle> subtitles;
 
-    void Awake()
+    public void playSub()
     {
         // Coroutine başlat
         StartCoroutine(DisplaySubtitles());

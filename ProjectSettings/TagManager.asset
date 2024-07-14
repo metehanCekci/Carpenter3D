@@ -15,6 +15,7 @@ TagManager:
   - pauseBack
   - AudioDontDestroy
   - DestroyOnStart
+  - Bonfire
   layers:
   - Default
   - TransparentFX

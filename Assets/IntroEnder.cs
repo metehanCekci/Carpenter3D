@@ -12,6 +12,8 @@ public class IntroEnder : MonoBehaviour
     public GameObject SpotLight;
     public GameObject AreaLight;
     public GameObject subtitles;
+
+    public GameObject trigger;
     public EnemyHealthScript ehs;
     // Start is called before the first frame update
     void Start()
@@ -19,18 +21,21 @@ public class IntroEnder : MonoBehaviour
         
     }
 
-    void Awake()
+    public void startIntro()
     {
         SpotLight.SetActive(true);
         fs.isRotating = false;
-        subtitles.SetActive(true);
+        subtitles.GetComponent<SubtitleScript>().playSub();
         SfxScript.Instance.playLightSwitch();
+
+        trigger.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         float remainingTime = (this.gameObject.GetComponent<AudioSource>().clip.length - this.gameObject.GetComponent<AudioSource>().time);
+        if(this.gameObject.activeInHierarchy)
         if(remainingTime <= 0)
         {
             mus.SetActive(true);
@@ -45,8 +50,9 @@ public class IntroEnder : MonoBehaviour
             fs.isRotating = true;
             fs.gameObject.GetComponent<Animator>().SetBool("isWalking" , true);
             SfxScript.Instance.playLightSwitch();
+
             
-            Destroy(this);
+            this.gameObject.SetActive(false);
         }
 
         

@@ -1,4 +1,17 @@
 {
-    "hasDoubleJump": true,
-    "hasGroundPound": true
+    "hasDoubleJump": false,
+    "hasGroundPound": false,
+    "hasParry": false,
+    "hasDash": false,
+    "hasAxe": false,
+    "level": 1.0,
+    "exp": 0.0,
+    "maxSyringe": 0.0,
+    "syringePower": 0.0,
+    "maxHP": 100.0,
+    "attackPower": 10.0,
+    "attackSpeed": 0.4000000059604645,
+    "attackReach": 2.5,
+    "bonfires": [],
+    "bosses": []
 }

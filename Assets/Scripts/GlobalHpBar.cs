@@ -19,10 +19,14 @@ public class GlobalHpBar : MonoBehaviour
     [SerializeField] Canvas deathMenu;
     Camera cam;
 
+    public bool isDead = false;
+
     // Awake is called when the script instance is being loaded
     void Awake()
     {
         cam = Camera.main;
+
+
     }
 
     
@@ -30,6 +34,14 @@ public class GlobalHpBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(!notPlayer)
+        {
+        ReadJson.Instance.ReadSaveFile();
+        healthSlider.maxValue = ReadJson.Instance.saveFile.maxHP;
+        easeSlider.maxValue = ReadJson.Instance.saveFile.maxHP;
+        maxHp = ReadJson.Instance.saveFile.maxHP;
+        }
+
         hp = maxHp;
     }
 
@@ -41,14 +53,15 @@ public class GlobalHpBar : MonoBehaviour
         /*Debug.Log($"Is dead: {pm.isDead}");
         Debug.Log($"Time scale: {Time.timeScale}");*/
 
-        if (hp <= 0 && !notPlayer)
+        if (hp <= 0 && !notPlayer && !isDead)
         {
-            Time.timeScale = 0;
             pm.isDead = true;
+            pm.enabled = false;
             deathMenu.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
             cam.GetComponent<CameraController>().enabled = false;
+            isDead = true;
         }
 
         if (healthSlider.value != easeSlider.value)

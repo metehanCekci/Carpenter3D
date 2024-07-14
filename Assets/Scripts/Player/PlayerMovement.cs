@@ -9,8 +9,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float slideSpeed = 15f;
     [SerializeField] float jumpForce = 10f;
     [SerializeField] float slamForce = 30f;
+    [SerializeField] bool hasSlam;
     [SerializeField] float dashForce = 20f;
     [SerializeField] float dashCooldown = 1f;
+    [SerializeField] bool hasDash;
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
     [SerializeField] float dashCrouchHeight = 1.2f;
@@ -27,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject bloodEffectPrefab;
     [SerializeField] PauseMenuScript pauseScript;
     [HideInInspector] public bool parrySuccessful = false;
+    [SerializeField] bool hasParry;
     [HideInInspector] public bool isDead = false;
 
     private Vector2 moveInput;
@@ -36,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputActions inputActions;
     [HideInInspector] public bool isGrounded;
     private bool isJumping;
+    bool hasDJump;
     private bool canDJump = true;
     private bool isCrouching;
     private bool isSliding;
@@ -48,10 +52,10 @@ public class PlayerMovement : MonoBehaviour
     private Camera mainCamera;
     private CameraShake cameraShake;
 
-    public float attackDistance = 3f;
+    public float attackDistance;
     public float attackDelay = 0.4f;
-    public float attackSpeed = 1f;
-    public float attackDamage = 10;
+    public float attackSpeed;
+    public float attackDamage;
     public LayerMask attacklayer;
 
     bool attacking = false;
@@ -71,6 +75,16 @@ public class PlayerMovement : MonoBehaviour
         armsAnimator = arms.GetComponent<Animator>(); // Arms animator�n� al
         GameObject weapons = GameObject.FindGameObjectWithTag("Weapons");
         parryKnif = GameObject.FindGameObjectWithTag("ParryKnife");
+
+        ReadJson.Instance.ReadSaveFile();
+        attackDamage = ReadJson.Instance.saveFile.attackPower;
+        attackSpeed = ReadJson.Instance.saveFile.attackSpeed;
+        attackDistance = ReadJson.Instance.saveFile.attackReach;
+
+        hasDash = ReadJson.Instance.saveFile.hasDash;
+        hasSlam = ReadJson.Instance.saveFile.hasGroundPound;
+        hasParry = ReadJson.Instance.saveFile.hasParry;
+        hasDJump = ReadJson.Instance.saveFile.hasDoubleJump;
     }
 
     void OnEnable()
@@ -121,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
     void Move()
     {
         if (isDashing && !isDead && !pauseScript.isPaused) return;
@@ -161,6 +176,8 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator parry()
     {
+        if(hasParry)
+        {
         SfxScript.Instance.playAttack();
         parryKnif.GetComponent<Animator>().SetTrigger("Parry");
         parrySuccessful = true;
@@ -174,7 +191,8 @@ public class PlayerMovement : MonoBehaviour
             parryCoolDown = false;
         }
         else
-            parryCoolDown = false;        
+            parryCoolDown = false;    
+        }    
         
     }
 
@@ -235,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
                 rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 isJumping = true;
             }
-            else if (ReadJson.Instance.config.hasDoubleJump)
+            else if (hasDJump)
             {
                 if (canDJump)
                 {
@@ -251,9 +269,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void SlamImpact()
     {
+        
         SfxScript.Instance.playSlam();
         isSlamming = false;
         Debug.Log("Slam Impact!");
+        
     }
 
     void OnCrouch(InputAction.CallbackContext context)
@@ -268,9 +288,12 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!isGrounded)
             {
+                if(hasSlam)
+                {
                 isSlamming = true;
                 rigidBody.AddForce(Vector3.down * fastFallMultiplier * slamForce, ForceMode.Impulse);
                 Debug.Log(rigidBody.velocity.y);
+                }
             }
             else
             {
@@ -289,7 +312,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDash(InputAction.CallbackContext context)
     {
-        if (context.performed && canDash && !isDashing && !isDead && !pauseScript.isPaused && (isGrounded || !hasAirDashed))
+        if (context.performed && hasDash && canDash && !isDashing && !isDead && !pauseScript.isPaused && (isGrounded || !hasAirDashed))
         {
             StartCoroutine(Dash());
             if (!isGrounded) hasAirDashed = true;

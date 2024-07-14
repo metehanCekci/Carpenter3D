@@ -12,7 +12,8 @@ public class cutsceneTrigger : MonoBehaviour
             Debug.Log("intro");
             anim.SetTrigger("Intro");
 
-            ass.gameObject.SetActive(true);
+            ass.Play();
+            ass.GetComponent<IntroEnder>().startIntro();
         }
     }
 

@@ -41,7 +41,6 @@ public class PauseMenuScript : MonoBehaviour
             cam.GetComponent<CameraController>().enabled = false;
             pm.enabled = false;
             Cursor.lockState = CursorLockMode.Confined;
-            Time.timeScale = 0;
             isPaused = true;
         }
         else if (isPaused)
@@ -53,7 +52,6 @@ public class PauseMenuScript : MonoBehaviour
             cam.GetComponent<CameraController>().enabled = true;
             pm.enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1;
             isPaused = false;
         }
         else return;
@@ -74,25 +72,22 @@ public class PauseMenuScript : MonoBehaviour
         cam.GetComponent<CameraController>().enabled = true;
         pm.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1;
         isPaused = false;
     }
 
     public void quitHomeButton()
     {
         
-        Time.timeScale = 1;
         Destroy(GameObject.FindGameObjectWithTag("AudioDontDestroy"));
         SceneManager.LoadScene(0);
     }
 
     public void reloadScene()
     {
+        SceneReloader.Instance.ResetToCheckpoint();
+
         pm.isDead = false;
-        Time.timeScale = 1;
         cam.GetComponent<CameraController>().enabled = true;
-        Destroy(GameObject.FindGameObjectWithTag("AudioDontDestroy"));
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         
     }
     public void quitGame()

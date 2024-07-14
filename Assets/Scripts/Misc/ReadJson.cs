@@ -9,6 +9,8 @@ public class ReadJson : MonoBehaviour
     [System.Serializable]
     public class SaveFile
     {
+        public int LastBonfireID;
+
         // BOOLS
         public bool hasDoubleJump;
         public bool hasGroundPound;

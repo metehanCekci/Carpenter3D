@@ -30,9 +30,11 @@ public class BonfireScript : MonoBehaviour
         if(mouseOn)
         {
         Debug.Log("rest");
+        ReadJson.Instance.saveFile.LastBonfireID = int.Parse(this.gameObject.name);
+        ReadJson.Instance.saveQuick.HP = ReadJson.Instance.saveFile.maxHP;
+        ReadJson.Instance.saveQuick.syringeCount = ReadJson.Instance.saveFile.maxSyringe;
         ReadJson.Instance.WriteSaveFile();
-
-        SceneReloader.Instance.ResetToCheckpoint();
+    
         }
 
     }

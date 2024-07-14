@@ -4216,7 +4216,7 @@ GameObject:
   - component: {fileID: 309607697}
   - component: {fileID: 309607696}
   m_Layer: 0
-  m_Name: Bonfire
+  m_Name: 3
   m_TagString: Bonfire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

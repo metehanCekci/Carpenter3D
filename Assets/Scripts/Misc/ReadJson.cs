@@ -82,7 +82,6 @@ public class ReadJson : MonoBehaviour
         if (Instance == null)
         {    Debug.Log("ReadJson Awake called");
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             ReadSaveFile();
             ReadSaveQuick();
         }

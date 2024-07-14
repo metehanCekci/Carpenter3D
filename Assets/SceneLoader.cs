@@ -228,17 +228,15 @@ public class SceneReloader : MonoBehaviour
             {
                 musicSwapper.isCombat = false;
             }
+
+            Initialize();
         }
     }
 
 public void BonfireManager(GameObject Player)
 {
 
-    if (ReadJson.Instance == null)
-    {
-        Debug.LogError("ReadJson Instance is null");
-        return;
-    }
+
 
     ReadJson.Instance.ReadSaveFile();
 

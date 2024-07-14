@@ -71,7 +71,6 @@ public class EnemyAlert : MonoBehaviour
         }
 
         // Debug log to confirm resetTrigger was called
-        Debug.Log("resetTrigger called and completed.");
     }
 
     private void Update()

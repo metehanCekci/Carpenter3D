@@ -15,29 +15,30 @@ public class EnemyAlert : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            
-            
-                ms.isCombat = true;
 
-                foreach (DoorScript obj in doorScripts)
-                {
-                    obj.doorLocked = true;
-                }
+            if (Encounter)
+            { return; }
+            ms.isCombat = true;
 
-                foreach (GameObject obj in gameObjectsToFollow)
+            foreach (DoorScript obj in doorScripts)
+            {
+                obj.doorLocked = true;
+            }
+
+            foreach (GameObject obj in gameObjectsToFollow)
+            {
+                FollowScript followScript = obj.GetComponent<FollowScript>();
+                if (followScript != null)
                 {
-                    FollowScript followScript = obj.GetComponent<FollowScript>();
-                    if (followScript != null)
+                    Animator animator = obj.GetComponent<Animator>();
+                    if (animator != null)
                     {
-                        Animator animator = obj.GetComponent<Animator>();
-                        if (animator != null)
-                        {
-                            animator.SetTrigger("Awake");
-                        }
-                        followScript.isFollowing = true;
+                        animator.SetTrigger("Awake");
                     }
+                    followScript.isFollowing = true;
                 }
-            
+            }
+
         }
     }
 
@@ -47,7 +48,27 @@ public class EnemyAlert : MonoBehaviour
 
         foreach (GameObject obj in gameObjectsToFollow)
         {
+
+            ms.isCombat = false;
             obj.SetActive(true);
+            Tags[] checkpointObjects = FindObjectsOfType<Tags>();
+            foreach (Tags tag in checkpointObjects)
+            {
+                if (tag.HasTag("Creature"))
+                {
+                    EnemyAttack enemyAttack = obj.GetComponent<EnemyAttack>();
+                    if (enemyAttack != null)
+                    {
+                        enemyAttack.isAttacking = false;
+
+                    }
+                }
+            }
+
+            foreach (DoorScript door in doorScripts)
+            {
+                door.doorLocked = false;
+            }
 
             EnemyHealthScript healthScript = obj.GetComponent<EnemyHealthScript>();
             if (healthScript != null)
@@ -75,39 +96,39 @@ public class EnemyAlert : MonoBehaviour
 
     private void Update()
     {
-        if(Encounter)
-        return;
-            count = 0; // Reset count at the beginning of each frame
+        if (Encounter)
+            return;
+        count = 0; // Reset count at the beginning of each frame
 
-            foreach (GameObject obj in gameObjectsToFollow)
+        foreach (GameObject obj in gameObjectsToFollow)
+        {
+            if (obj.activeInHierarchy)
             {
-                if (obj.activeInHierarchy)
-                {
-                    // If any object is active, break out of the loop
-                    count = 0;
-                    break;
-                }
-                else if(!obj.activeInHierarchy)
-                {
-                    count++;
-                }
-            }
-
-            if (count >= gameObjectsToFollow.Length)
-            {
-                ms.isCombat = false;
-
-                foreach (DoorScript obj in doorScripts)
-                {
-                    obj.doorLocked = false;
-                }
-
-                // Debug log to confirm encounter is finished
-                Debug.Log("All enemies defeated. Doors unlocked.");
+                // If any object is active, break out of the loop
                 count = 0;
-
-                Encounter = true;
+                break;
             }
-        
+            else if (!obj.activeInHierarchy)
+            {
+                count++;
+            }
+        }
+
+        if (count >= gameObjectsToFollow.Length)
+        {
+            ms.isCombat = false;
+
+            foreach (DoorScript obj in doorScripts)
+            {
+                obj.doorLocked = false;
+            }
+
+            // Debug log to confirm encounter is finished
+            Debug.Log("All enemies defeated. Doors unlocked.");
+            count = 0;
+
+            Encounter = true;
+        }
+
     }
 }

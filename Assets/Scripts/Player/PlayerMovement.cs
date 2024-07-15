@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using Unity.VisualScripting.FullSerializer.Internal;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -27,10 +28,11 @@ public class PlayerMovement : MonoBehaviour
     private bool parryCoolDown = false;
 
     [SerializeField] GameObject bloodEffectPrefab;
+    public GameObject SyringeCanvasObj;
     [SerializeField] PauseMenuScript pauseScript;
     [HideInInspector] public bool parrySuccessful = false;
     [SerializeField] bool hasParry;
-    [HideInInspector] public bool isDead = false;
+ public bool isDead = false;
 
     private Vector2 moveInput;
     private Vector3 slideDirection;
@@ -97,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Dash.performed += OnDash;
         inputActions.Player.Fire.performed += OnFire;
         inputActions.Player.Parry.performed += OnParry;
+        inputActions.Player.Syringe.performed += OnSyringe;
         inputActions.Player.Enable();
     }
 
@@ -110,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Dash.performed -= OnDash;
         inputActions.Player.Fire.performed -= OnFire;
         inputActions.Player.Parry.performed -= OnParry;
+        inputActions.Player.Syringe.performed -= OnSyringe;
         inputActions.Player.Disable();
     }
 
@@ -167,6 +171,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void OnSyringe(InputAction.CallbackContext context)
+    {
+        StartCoroutine(Parry());
+    }
+
+    IEnumerator Parry()
+    {
+        yield return new WaitForSeconds(0);
+        SyringeCanvasObj.GetComponent<SyringeScript>().useSyringe();
+    }
+
     public void OnParry(InputAction.CallbackContext context)
     {
         if (!parryCoolDown)
@@ -182,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
         parrySuccessful = true;
         parryCoolDown = true;
         yield return new WaitForSeconds(0.2f);
-        if (parrySuccessful)
+        if (parrySuccessful)//it is actually parry UNsuccessful but im dumb so fuck it
         {
             parrySuccessful = false;
 
@@ -190,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
             parryCoolDown = false;
         }
         else
-            parryCoolDown = false;    
+            parryCoolDown = false;
         }    
     }
 

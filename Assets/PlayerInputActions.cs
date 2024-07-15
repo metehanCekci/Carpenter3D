@@ -116,6 +116,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Syringe"",
+                    ""type"": ""Button"",
+                    ""id"": ""72227f8b-5628-4e3c-86ef-f088c83f8515"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -633,6 +642,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""478de932-7870-428e-998e-e66a37b6388a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Syringe"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1169,6 +1189,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
         m_Player_Parry = m_Player.FindAction("Parry", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Syringe = m_Player.FindAction("Syringe", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1252,6 +1273,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Menu;
     private readonly InputAction m_Player_Parry;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Syringe;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1266,6 +1288,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Menu => m_Wrapper.m_Player_Menu;
         public InputAction @Parry => m_Wrapper.m_Player_Parry;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Syringe => m_Wrapper.m_Player_Syringe;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1305,6 +1328,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Syringe.started += instance.OnSyringe;
+            @Syringe.performed += instance.OnSyringe;
+            @Syringe.canceled += instance.OnSyringe;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1339,6 +1365,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Syringe.started -= instance.OnSyringe;
+            @Syringe.performed -= instance.OnSyringe;
+            @Syringe.canceled -= instance.OnSyringe;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1486,6 +1515,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMenu(InputAction.CallbackContext context);
         void OnParry(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnSyringe(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

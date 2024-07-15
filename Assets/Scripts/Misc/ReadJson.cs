@@ -9,7 +9,7 @@ public class ReadJson : MonoBehaviour
     [System.Serializable]
     public class SaveFile
     {
-                public int LastBonfireID;
+        public int LastBonfireID;
 
         // BOOLS
         public bool hasDoubleJump;
@@ -80,8 +80,9 @@ public class ReadJson : MonoBehaviour
     void Awake()
     {
         if (Instance == null)
-        {    Debug.Log("ReadJson Awake called");
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
             ReadSaveFile();
             ReadSaveQuick();
         }

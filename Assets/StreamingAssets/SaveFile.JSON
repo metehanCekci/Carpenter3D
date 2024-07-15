@@ -1,25 +1,25 @@
 {
-    "LastBonfireID": 1,
-    "hasDoubleJump": false,
-    "hasGroundPound": false,
-    "hasParry": false,
-    "hasDash": false,
-    "hasAxe": false,
+    "LastBonfireID": 0,
+    "hasDoubleJump": true,
+    "hasGroundPound": true,
+    "hasParry": true,
+    "hasDash": true,
+    "hasAxe": true,
     "level": 1.0,
     "exp": 0.0,
     "maxSyringe": 0.0,
     "syringePower": 0.0,
-    "maxHP": 1000.0,
-    "attackPower": 10.0,
+    "maxHP": 100.0,
+    "attackPower": 15.0,
     "attackSpeed": 0.4000000059604645,
-    "attackReach": 2.5,
+    "attackReach": 4.0,
     "bonfires": [
         {
             "BonfireID": 0,
             "BonfirePos": {
                 "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
+                "y": 6.420000076293945,
+                "z": 73.13999938964844
             }
         },
         {
@@ -28,6 +28,14 @@
                 "x": 0.5299999713897705,
                 "y": 24.18000030517578,
                 "z": -54.619998931884769
+            }
+        },
+        {
+            "BonfireID": 2,
+            "BonfirePos": {
+                "x": 12.359999656677246,
+                "y": 14.559000015258789,
+                "z": -63.77000045776367
             }
         }
     ],

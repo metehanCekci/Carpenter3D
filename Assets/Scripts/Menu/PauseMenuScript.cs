@@ -84,11 +84,14 @@ public class PauseMenuScript : MonoBehaviour
 
     public void reloadScene()
     {
-        SceneReloader.Instance.ResetToCheckpoint();
-
-        pm.isDead = false;
         cam.GetComponent<CameraController>().enabled = true;
-        
+        pm.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        SceneReloader.Instance.ResetToCheckpoint();
+        isPaused = false;
+        pm.isDead = false;
+        Time.timeScale = 1;
     }
     public void quitGame()
     {

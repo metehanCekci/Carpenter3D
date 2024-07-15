@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneReloader : MonoBehaviour
 {
-    // Singleton instance
     public static SceneReloader Instance { get; private set; }
 
-    // A class to store the initial state of each object
     [System.Serializable]
     public class ObjectState
     {
@@ -57,7 +57,6 @@ public class SceneReloader : MonoBehaviour
         }
     }
 
-    // List to store initial states of all objects
     public List<ObjectState> initialStates = new List<ObjectState>();
 
     [SerializeField] Canvas deathMenu;
@@ -67,11 +66,9 @@ public class SceneReloader : MonoBehaviour
 
     void Awake()
     {
-        // Singleton setup
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             Initialize();
         }
         else
@@ -80,12 +77,29 @@ public class SceneReloader : MonoBehaviour
         }
     }
 
+    private void Start() 
+    {
+        Tags[] checkpointObjects = FindObjectsOfType<Tags>();
+        foreach (Tags tag in checkpointObjects)
+        {
+            if (tag.HasTag("ResetPlayer"))
+            {
+                BonfireManager(tag.gameObject);
+            }
+        }
+    }
+
     void Initialize()
     {
-        // Find all objects with the tag "CheckpointObject"
+        ReadJson.Instance.ReadSaveFile();
+
+        if (ReadJson.Instance.saveFile == null)
+        {
+            return;
+        }
+
         Tags[] checkpointObjects = FindObjectsOfType<Tags>();
 
-        // Store their initial states
         foreach (Tags obj in checkpointObjects)
         {
             if (obj.HasTag("Reset"))
@@ -102,7 +116,7 @@ public class SceneReloader : MonoBehaviour
                 NavMeshAgent agent = obj.GetComponent<NavMeshAgent>();
                 if (agent != null)
                 {
-                    agent.speed = followScript.maxSpeed;
+                    agent.speed = 0;
                 }
             }
             if (obj.HasTag("Music"))
@@ -127,7 +141,6 @@ public class SceneReloader : MonoBehaviour
                 if (enemyAttack != null)
                 {
                     enemyAttack.isAttacking = false;
-                    
                 }
 
                 EnemyHealthScript healthScript = obj.GetComponent<EnemyHealthScript>();
@@ -143,14 +156,19 @@ public class SceneReloader : MonoBehaviour
                 }
             }
 
-            if(obj.HasTag("ResetPlayer"))
+            if (obj.HasTag("ResetPlayer"))
             {
+                obj.GetComponent<PlayerMovement>().isDead = false;
                 BonfireManager(obj.gameObject);
+            }
+            if (obj.HasTag("Syringe"))
+            {
+                obj.GetComponent<SyringeScript>().gameObject.GetComponent<Image>().fillAmount = 0;
+                obj.GetComponent<SyringeScript>().syringeCounterText.text = obj.GetComponent<SyringeScript>().startSyringe.ToString();
             }
         }
     }
 
-    // Function to reset all objects to their initial states
     public void ResetToCheckpoint()
     {
         deathMenu.gameObject.SetActive(false);
@@ -233,35 +251,27 @@ public class SceneReloader : MonoBehaviour
         }
     }
 
-public void BonfireManager(GameObject Player)
-{
-
-
-
-    ReadJson.Instance.ReadSaveFile();
-
-    if (ReadJson.Instance.saveFile == null)
+    public void BonfireManager(GameObject Player)
     {
-        Debug.LogError("SaveFile is null");
-        return;
+        ReadJson.Instance.ReadSaveFile();
+
+        if (ReadJson.Instance.saveFile == null)
+        {
+            return;
+        }
+
+        int ID = ReadJson.Instance.saveFile.LastBonfireID;
+
+        if (ReadJson.Instance.saveFile.bonfires == null || ReadJson.Instance.saveFile.bonfires.Count == 0)
+        {
+            return;
+        }
+
+        if (ID < 0 || ID >= ReadJson.Instance.saveFile.bonfires.Count)
+        {
+            return;
+        }
+
+        Player.transform.position = ReadJson.Instance.saveFile.bonfires[ID].BonfirePos;
     }
-
-    int ID = ReadJson.Instance.saveFile.LastBonfireID;
-
-    if (ReadJson.Instance.saveFile.bonfires == null || ReadJson.Instance.saveFile.bonfires.Count == 0)
-    {
-        Debug.LogError("Bonfires list is null or empty");
-        return;
-    }
-
-    if (ID < 0 || ID >= ReadJson.Instance.saveFile.bonfires.Count)
-    {
-        Debug.LogError($"Invalid Bonfire ID: {ID}");
-        return;
-    }
-
-    Player.transform.position = ReadJson.Instance.saveFile.bonfires[ID].BonfirePos;
-    Debug.Log($"Player position set to bonfire ID: {ID} at position: {ReadJson.Instance.saveFile.bonfires[ID].BonfirePos}");
-}
-
 }

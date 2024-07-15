@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 153365381715006431}
   - component: {fileID: 5028374461927508565}
   - component: {fileID: 331524274462477621}
+  - component: {fileID: 4433060010678225096}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -201,6 +202,7 @@ MonoBehaviour:
   duration: 0
   magnitude: 0
   bloodEffectPrefab: {fileID: 0}
+  SyringeCanvasObj: {fileID: 0}
   pauseScript: {fileID: 0}
   parrySuccessful: 0
   hasParry: 0
@@ -322,11 +324,29 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 7d460e79-4896-4127-9f84-a2235d61882c
     m_ActionName: Player/Interact[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 72227f8b-5628-4e3c-86ef-f088c83f8515
+    m_ActionName: Player/Syringe[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &4433060010678225096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495473025281210670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f49a5cbd44020d44b7ada9ebc3fe0b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tags:
+  - ResetPlayer
 --- !u!1 &625497573313699597
 GameObject:
   m_ObjectHideFlags: 0

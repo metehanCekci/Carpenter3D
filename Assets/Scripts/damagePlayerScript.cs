@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 public class damagePlayerScript : MonoBehaviour
 {
     public PlayerMovement PM;
+    public SyringeScript ss;
     public GlobalHpBar PHB;
     public float damageAmt;
     private float timer;
@@ -57,6 +58,7 @@ public class damagePlayerScript : MonoBehaviour
     {
         Debug.Log("succesfull parry");
         SfxScript.Instance.playParry();
+        ss.fillSyringe();
         PM.transform.GetChild(0).GetChild(2).GetChild(0).gameObject.SetActive(true);
         Invoke("setFalse",0.2f);
         PM.parrySuccessful = false;

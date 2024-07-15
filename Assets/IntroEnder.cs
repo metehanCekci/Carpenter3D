@@ -48,8 +48,8 @@ public class IntroEnder : MonoBehaviour
 
     public void IntroEnd()
     {
-                    mus.SetActive(true);
-            fs.gameObject.GetComponent<NavMeshAgent>().speed = enemySpeed;
+            mus.SetActive(true);
+
             fs.isFollowing = true;
 
             close.SetActive(true);
@@ -60,6 +60,7 @@ public class IntroEnder : MonoBehaviour
             AreaLight.SetActive(true);
             fs.isRotating = true;
             fs.gameObject.GetComponent<Animator>().SetBool("isWalking" , true);
+            fs.gameObject.GetComponent<NavMeshAgent>().speed = enemySpeed;
             fs.gameObject.GetComponent<KaruiAi>().enabled = true;
             SfxScript.Instance.playLightSwitch();
 

@@ -35,7 +35,7 @@ public class KaruiAi : MonoBehaviour
 
     public GameObject Player;
     private NavMeshAgent agent;
-    private float baseSpeed;
+    public float baseSpeed;
 
     public bool isBusy = false;
 
@@ -53,7 +53,7 @@ public class KaruiAi : MonoBehaviour
     void Start()
     {
         agent = this.gameObject.GetComponent<NavMeshAgent>();
-        baseSpeed = agent.speed;
+
     }
 
     void FixedUpdate()
@@ -100,11 +100,7 @@ public class KaruiAi : MonoBehaviour
         isWaiting = false;
 
         // Reset agent speed and re-enable it if needed
-        agent.speed = 0;
-        if (!agent.enabled)
-        {
-            agent.enabled = true;
-        }
+
 
         // Reset animator
         Animator animator = GetComponent<Animator>();
@@ -118,6 +114,10 @@ public class KaruiAi : MonoBehaviour
             animator.ResetTrigger("JumpAttack");
             animator.SetBool("isWalking", false);
         }
+    }
+
+    void OnEnable() {
+             
     }
 
     public IEnumerator ForeHeadSlam()

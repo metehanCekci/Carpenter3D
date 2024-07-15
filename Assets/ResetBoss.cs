@@ -18,7 +18,6 @@ public class ResetBoss : MonoBehaviour
         this.gameObject.GetComponent<KaruiAi>().enabled = false;
         this.gameObject.GetComponent<FollowScript>().isFollowing = false;
         this.gameObject.GetComponent<FollowScript>().isRotating = false;
-        Debug.Log("off");
         trigger.SetActive(true);
 
 

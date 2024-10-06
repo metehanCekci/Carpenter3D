@@ -127,6 +127,12 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        /*
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        transform.Translate(new Vector3(horizontalInput, 0, verticalInput ) * movementSpeed * Time.deltaTime );
+        */
+
         if (iFrames) Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("HitBox"), true);
         else
         {
@@ -493,5 +499,10 @@ public class PlayerMovement : MonoBehaviour
             canDJump = true;
             isJumping = false;
         }
+    }
+    public void ResetPlayerInput()
+    {
+        moveInput = Vector2.zero;
+        rigidBody.velocity = Vector3.zero; // Hareketi tamamen durdurmak için hız sıfırlanıyor
     }
 }

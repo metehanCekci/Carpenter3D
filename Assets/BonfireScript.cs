@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 
 public class BonfireScript : MonoBehaviour
 {
+    private PlayerInputActions inputActions;
+    [SerializeField] GameObject Player;
 
-        private PlayerInputActions inputActions;
-
-        void Awake() {
+    void Awake() {
                     inputActions = new PlayerInputActions();
         }
 
@@ -39,6 +39,35 @@ public class BonfireScript : MonoBehaviour
 
     }
 
+    public void BonfireManager(GameObject Player)
+    {
+        ReadJson.Instance.ReadSaveFile();
+
+        if (ReadJson.Instance.saveFile == null)
+        {
+            return;
+        }
+
+        int ID = ReadJson.Instance.saveFile.LastBonfireID;
+
+        if (ReadJson.Instance.saveFile.bonfires == null || ReadJson.Instance.saveFile.bonfires.Count == 0)
+        {
+            return;
+        }
+
+        if (ID < 0 || ID >= ReadJson.Instance.saveFile.bonfires.Count)
+        {
+            return;
+        }
+
+        // Bonfire pozisyonunu loglayalým
+        Debug.Log("Bonfire Pos: " + ReadJson.Instance.saveFile.bonfires[ID].BonfirePos);
+
+    }
+    public void Update()
+    {
+        BonfireManager(Player);
+    }
 
     public void showText()
     {

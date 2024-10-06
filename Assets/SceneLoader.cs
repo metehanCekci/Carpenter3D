@@ -84,10 +84,11 @@ public class SceneReloader : MonoBehaviour
         {
             if (tag.HasTag("ResetPlayer"))
             {
-                BonfireManager(tag.gameObject);
+                BonfireManager(tag.gameObject); // Burada loglama iþlemi de çalýþacak
             }
         }
     }
+
 
     void Initialize()
     {

@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PauseMenuScript : MonoBehaviour
 {
@@ -34,6 +37,7 @@ public class PauseMenuScript : MonoBehaviour
         {
 
             // Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0;
             pauseMenuUI.gameObject.SetActive(true);
             settingsMenuUI.gameObject.SetActive(false);
             pauseBack.gameObject.SetActive(true);
@@ -45,6 +49,7 @@ public class PauseMenuScript : MonoBehaviour
         }
         else if (isPaused)
         {
+            Time .timeScale = 1;
             pauseBack.gameObject.SetActive(false);
             pauseMenuUI.gameObject.SetActive(false);
             settingsMenuUI.gameObject.SetActive(false);
@@ -73,6 +78,7 @@ public class PauseMenuScript : MonoBehaviour
         pm.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         isPaused = false;
+        Time .timeScale = 1;
     }
 
     public void quitHomeButton()
@@ -82,16 +88,28 @@ public class PauseMenuScript : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    //
+    // #TODO: fix checkpoint system   IMPORTANT!!!!
+    //
+
     public void reloadScene()
     {
-        cam.GetComponent<CameraController>().enabled = true;
+
+        pm.ResetPlayerInput();
         pm.enabled = true;
+        Time.timeScale = 1;
+        cam.GetComponent<CameraController>().enabled = true;
+        pauseMenuUI.gameObject.SetActive(false);
+        settingsMenuUI.gameObject.SetActive(false);
+        pauseBack.gameObject.SetActive(false);
+        playerUI.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         SceneReloader.Instance.ResetToCheckpoint();
         isPaused = false;
         pm.isDead = false;
-        Time.timeScale = 1;
+        
     }
     public void quitGame()
     {

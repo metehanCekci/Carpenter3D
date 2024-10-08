@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool hasDash;
     [SerializeField] float gravity = -9.81f;
     [SerializeField] float crouchHeight = 0.7f;
-    [SerializeField] float dashCrouchHeight = 1.2f;
+    //[SerializeField] float dashCrouchHeight = 1.2f;
     [SerializeField] float standingHeight = 2.5f;
     [SerializeField] private float slopeForceRayLength = 1.5f;
     [SerializeField] private float slopeDrag = 5f;
@@ -77,16 +77,6 @@ public class PlayerMovement : MonoBehaviour
         armsAnimator = arms.GetComponent<Animator>(); // Arms animator�n� al
         GameObject weapons = GameObject.FindGameObjectWithTag("Weapons");
         parryKnif = GameObject.FindGameObjectWithTag("ParryKnife");
-
-        ReadJson.Instance.ReadSaveFile();
-        attackDamage = ReadJson.Instance.saveFile.attackPower;
-        attackSpeed = ReadJson.Instance.saveFile.attackSpeed;
-        attackDistance = ReadJson.Instance.saveFile.attackReach;
-
-        hasDash = ReadJson.Instance.saveFile.hasDash;
-        hasSlam = ReadJson.Instance.saveFile.hasGroundPound;
-        hasParry = ReadJson.Instance.saveFile.hasParry;
-        hasDJump = ReadJson.Instance.saveFile.hasDoubleJump;
     }
 
     void OnEnable()
@@ -123,6 +113,8 @@ public class PlayerMovement : MonoBehaviour
         rigidBody.freezeRotation = true;
         rigidBody.useGravity = true;
         capsuleCollider = GetComponent<CapsuleCollider>();
+        Vector3 spawnPosition = CheckpointManager.instance.GetCheckpointPosition();
+        transform.position = spawnPosition;
     }
 
     void FixedUpdate()

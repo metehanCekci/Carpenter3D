@@ -24,8 +24,10 @@ public class PauseMenuScript : MonoBehaviour
     PlayerInputActions inputActions;
     [HideInInspector] public bool isPaused;
     Camera cam;
+    Scene currentScene;
     void Awake()
     {
+        currentScene = SceneManager.GetActiveScene();
         cam = Camera.main;
         inputActions = new PlayerInputActions();
         isPaused = false;
@@ -106,7 +108,7 @@ public class PauseMenuScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        SceneReloader.Instance.ResetToCheckpoint();
+        SceneManager.LoadScene(currentScene.buildIndex);
         isPaused = false;
         pm.isDead = false;
         

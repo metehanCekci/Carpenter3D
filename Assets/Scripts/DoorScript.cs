@@ -12,9 +12,12 @@ public class DoorScript : MonoBehaviour
     public bool doorLocked = false;
 
     private bool doorOpening = false;
-    private bool doorClosing = false;
-    private bool doorIsClosed = true;
-    private bool closeInQueue = false;
+    /*
+     * They are not in use right now 
+    //private bool doorClosing = false;
+    //private bool doorIsClosed = true;
+    //private bool closeInQueue = false;
+    */
 
     private Vector3 initialPositionLeft;
     private Vector3 initialPositionRight;

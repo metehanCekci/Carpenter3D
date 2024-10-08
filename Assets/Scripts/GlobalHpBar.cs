@@ -34,15 +34,15 @@ public class GlobalHpBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(!notPlayer)
-        {
-        ReadJson.Instance.ReadSaveFile();
-        healthSlider.maxValue = ReadJson.Instance.saveFile.maxHP;
-        easeSlider.maxValue = ReadJson.Instance.saveFile.maxHP;
-        maxHp = ReadJson.Instance.saveFile.maxHP;
-        }
+        //if(!notPlayer)
+        //{
+        //ReadJson.Instance.ReadSaveFile();
+        //healthSlider.maxValue = ReadJson.Instance.saveFile.maxHP;
+        //easeSlider.maxValue = ReadJson.Instance.saveFile.maxHP;
+        //maxHp = ReadJson.Instance.saveFile.maxHP;
+        //}
 
-        hp = maxHp;
+        //hp = maxHp;
     }
 
     // Update is called once per frame
